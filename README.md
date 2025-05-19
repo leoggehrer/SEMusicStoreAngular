@@ -24,6 +24,8 @@
       - [Schritt 14.A: Erstellen der Übersicht-Komponente für `Genre`](#schritt-14a-erstellen-der-übersicht-komponente-für-genre)
       - [Schritt 14.B: Erstellen der Bearbeitung-Komponente für `Genre`](#schritt-14b-erstellen-der-bearbeitung-komponente-für-genre)
       - [Schritt 14.C: Anpassen der Übersicht-Komponente für `Genre`](#schritt-14c-anpassen-der-übersicht-komponente-für-genre)
+      - [Schritt 14.D: Anpassen der Bearbeitung-Komponente für `Genre`](#schritt-14d-anpassen-der-bearbeitung-komponente-für-genre)
+    - [Schritt 15: Eingabeformular für die Entity-`Artist` erstellen](#schritt-15-eingabeformular-für-die-entity-artist-erstellen)
 
 ---
 
@@ -64,7 +66,8 @@ Mit dem `SEMusicStoreBase` können Sie die Aufgabenstellung in wenigen Schritten
 | 14.A    | Erstellen der Übersicht-Komponente für `Genre`         |
 | 14.B    | Erstellen der Bearbeitung-Komponente für `Genre`       |
 | 14.C    | Anpassen der Übersicht-Komponente für `Genre`          |
-| 9       | Eingabeformular für die Entity-`Artist` erstellen      |
+| 14.D    | Anpassen der Bearbeitung-Komponente für `Genre`        |
+| 15      | Eingabeformular für die Entity-`Artist` erstellen      |
 
 ### Schritt 1: Repository klonen
 
@@ -561,7 +564,7 @@ export class GenreListComponent extends GenericEntityListComponent<IItem> implem
     }
 
     /* 
-    *  Hier k�nnen Sie die Sortierung der Anzeige anpassen
+    *  Hier koennen Sie die Sortierung der Anzeige anpassen
     *  z.B.: return items.sort((a, b) => a.name.localeCompare(b.name));
     *  Default: keine Sortierung
     */
@@ -583,13 +586,138 @@ export class GenreListComponent extends GenericEntityListComponent<IItem> implem
 Die Datei `genre-list.component.html` muss ebenfalls angepasst werden. Kopieren Sie den Inhalt der Datei `sampleItemEntityList.html` im Ordner **SolutionItems** und fügen Sie diesen in die Datei `genre-list.component.html` ein. Passen Sie die Datei `genre-list.component.html` wie folgt an:
 
 ```html
+<div class="container mt-4">
+    <h3 class="mb-4">{{pageTitle}}</h3>
 
+    <div class="d-flex mb-3">
+        <!-- Aktion: Neues Element hinzufuegen -->
+        <button *ngIf="canAdd"
+                class="btn btn-primary me-2"
+                (click)="addCommand()">
+            <i class="bi bi-plus"></i>
+        </button>
+        <!-- Suchtext -->
+        <input *ngIf="canSearch"
+               type="text"
+               class="form-control me-2"
+               [(ngModel)]="searchTerm"
+               placeholder="🔍 Suche nach..." />
+        <!-- Aktion: Daten neu Laden -->
+        <button *ngIf="canRefresh"
+                class="btn btn-success me-2"
+                (click)="reloadData()">
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
+    </div>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <!-- Hier werden die Spalten-Bezeichner konfiguriert -->
+                <th>Name</th>
+                <th *ngIf="canEdit || canDelete"
+                    style="white-space: nowrap; width: 1%;">
+                    Aktion
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of dataItems">
+                <!-- Hier werden die Spalten-Werte konfiguriert -->
+                <td><strong>{{ item.name }}</strong></td>
+                <!-- Aktion-Spalte: Bearbeiten und Loeschen -->
+                <td *ngIf="canEdit || canDelete">
+                    <div class="d-flex gap-1">
+                        <button *ngIf="canEdit"
+                                class="btn btn-sm btn-outline-secondary me-2"
+                                (click)="editCommand(item)">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button *ngIf="canDelete"
+                                class="btn btn-sm btn-outline-danger"
+                                (click)="deleteCommand(item)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 ```
 
+#### Schritt 14.D: Anpassen der Bearbeitung-Komponente für `Genre`
 
+Nun muss die Komponente `GenreEdit` angepasst werden. Kopieren Sie den Inhalt der Datei `sampleItemEdit.ts` im Ordner **SolutionItems** und fügen Sie diesen in die Datei `genre-edit.component.ts` ein. Passen Sie die Datei `genre-edit.component.ts` wie folgt an:
 
+```typescript
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { IGenre } from '@app/models/entities/i-genre';
+import { GenericEditComponent } from '@app/components/base/generic-edit.component';
 
-Dieser Befehl erstellt eine neue Komponente mit dem Namen `GenreEdit` im Verzeichnis `components`. Diese Komponente ist ebenfalls eine **Standalone**-Komponente. Das bedeutet, dass die Komponente keine Abhängigkeiten zu anderen Modulen hat.
+/* Ersetzen Sie hier 'IKey' durch den gewuenschten 'Type' (z.B.: 'IAlbum') */
+interface IItem extends IGenre {
 
+}
+/* Ersetzen Sie in Component 'item' durch den gewuenschten Namen (z.B.: album) */
+@Component({
+    selector: 'app-genre-edit',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './genre-edit.component.html',
+    styleUrl: './genre-edit.component.css'
+})
+// Ersetzen Sie hier Item durch den gewuenschten Namen (z.B.: Item -> Album)
+export class GenreEditComponent extends GenericEditComponent<IItem> {
+
+    constructor(
+        public override activeModal: NgbActiveModal) {
+        super(activeModal);
+    }
+
+    /*
+    *  Passen Sie hier den Titel fuer die Ueberschtsseite an.
+    *  Default: Item Hinzuf�gen oder Item Berbeiten
+    */
+    public override get title(): string {
+        return 'Genre ' + super.title;
+    }
+}
+```
+
+Die Datei `genre-edit.component.html` muss ebenfalls angepasst werden. Kopieren Sie den Inhalt der Datei `sampleItemEdit.html` im Ordner **SolutionItems** und fügen Sie diesen in die Datei `genre-edit.component.html` ein. Passen Sie die Datei `genre-edit.component.html` wie folgt an:
+
+```html
+<div *ngIf="dataItem" class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3>{{ title }}</h3>
+        <button type="button"
+                class="btn btn-sm btn-danger"
+                aria-label="Schliessen"
+                (click)="dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="card-body">
+        <form (ngSubmit)="submitForm()" #editForm="ngForm">
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input class="form-control" [(ngModel)]="dataItem.name" name="name" required />
+            </div>
+
+            <button class="btn btn-success" type="submit">Speichern</button>
+            <button class="btn btn-secondary ms-2" type="button" (click)="cancelForm()">Abbrechen</button>
+        </form>
+    </div>
+</div>
+```
+
+> **Congratulations** on your first form in Angular !
+
+### Schritt 15: Eingabeformular für die Entity-`Artist` erstellen
+
+Nun erstellen Sie ein Eingabeformular für die Entity-`Artist`. Die Vorgehensweise ist die gleiche wie bei der Entity-`Genre`. Sie müssen lediglich die Namen der Dateien und die Namen der Klassen anpassen. Die Dateien `artist-list.component.ts`, `artist-list.component.html`, `artist-edit.component.ts` und `artist-edit.component.html` sind analog zu den Dateien `genre-list.component.ts`, `genre-list.component.html`, `genre-edit.component.ts` und `genre-edit.component.html` aufgebaut.
 
 **Viel Erfolg beim Umsetzen!**

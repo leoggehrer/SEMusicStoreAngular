@@ -30,7 +30,7 @@ export class GenreListComponent extends GenericEntityListComponent<IItem> implem
 
     ngOnInit(): void {
         // Passen Sie hier den Filter entsprechend an
-        this._queryParams.filter = 'name.Contains(@0)';
+        this._queryParams.filter = 'name.ToLower().Contains(@0)';
         this.reloadData();
     }
 

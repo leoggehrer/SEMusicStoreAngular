@@ -11,7 +11,10 @@
             builder.Services.AddControllers()
                             .AddNewtonsoftJson();       // Add this to the controllers for PATCH-operation.
 
+
             // Add ContextAccessor to the services.
+            builder.Services.AddScoped<Contracts.IContextAccessor, Controllers.ContextAccessor>();
+
             // Added GeGe
             builder.Services.AddCors(options =>
             {
