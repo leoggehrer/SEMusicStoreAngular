@@ -26,6 +26,8 @@
       - [Schritt 14.C: Anpassen der Übersicht-Komponente für `Genre`](#schritt-14c-anpassen-der-übersicht-komponente-für-genre)
       - [Schritt 14.D: Anpassen der Bearbeitung-Komponente für `Genre`](#schritt-14d-anpassen-der-bearbeitung-komponente-für-genre)
     - [Schritt 15: Eingabeformular für die Entity-`Artist` erstellen](#schritt-15-eingabeformular-für-die-entity-artist-erstellen)
+    - [Schritt 16: Eingabeformular für die Entity-`Album` erstellen](#schritt-16-eingabeformular-für-die-entity-album-erstellen)
+      - [Schritt 16.A: Option 1: Auflösung der `ManyToOne`-Beziehung](#schritt-16a-option-1-auflösung-der-manytoone-beziehung)
 
 ---
 
@@ -68,6 +70,8 @@ Mit dem `SEMusicStoreBase` können Sie die Aufgabenstellung in wenigen Schritten
 | 14.C    | Anpassen der Übersicht-Komponente für `Genre`          |
 | 14.D    | Anpassen der Bearbeitung-Komponente für `Genre`        |
 | 15      | Eingabeformular für die Entity-`Artist` erstellen      |
+| 16      | Eingabeformular für die Entity-`Album` erstellen       |
+| 16.A    | Option 1: Auflösung der `ManyToOne`-Beziehung          |
 
 ### Schritt 1: Repository klonen
 
@@ -719,5 +723,191 @@ Die Datei `genre-edit.component.html` muss ebenfalls angepasst werden. Kopieren 
 ### Schritt 15: Eingabeformular für die Entity-`Artist` erstellen
 
 Nun erstellen Sie ein Eingabeformular für die Entity-`Artist`. Die Vorgehensweise ist die gleiche wie bei der Entity-`Genre`. Sie müssen lediglich die Namen der Dateien und die Namen der Klassen anpassen. Die Dateien `artist-list.component.ts`, `artist-list.component.html`, `artist-edit.component.ts` und `artist-edit.component.html` sind analog zu den Dateien `genre-list.component.ts`, `genre-list.component.html`, `genre-edit.component.ts` und `genre-edit.component.html` aufgebaut.
+
+### Schritt 16: Eingabeformular für die Entity-`Album` erstellen
+
+Nun erstellen wir das Eingabeformular für die Entity-`Album`. Der Unterschied zu den vorherigen Formularen besteht darin, dass die Entity-`Album` eine `ManyToOne`-Beziehung zur Entity-`Artist` hat. Das bedeutet, dass wir in der Komponente `AlbumEditComponent` eine Auswahl für den `Artist` benötigen. Diese Auswahl wird mit einem `Select`-Element realisiert. Zudem soll in der Übersicht der `Artist` angezeigt werden. Das bedeutet, dass wir in der Komponente `AlbumListComponent` eine auf die Daten von `Artist` benötigen.  Es gibt zwei Möglichkeiten, dies zu realisieren:
+
+- **Option 1:** Beim Laden der Entität-`Album` wird die `ManyToOne`-Beziehung aufgelöst.
+- **Option 2:** Für die Übersichtsseite wird eine **View** erstellt, welche aller erforderlichen Eigenschaften (wie den
+Artist-Namen) bereitstellt.
+
+#### Schritt 16.A: Option 1: Auflösung der `ManyToOne`-Beziehung
+
+Für die Auflösung der `ManyToOne`-Beziehung muss die Klasse `AlbumSet` erweitert werden. Diese Klasse befindet sich im `Logic`-Projekt im Ordner `DataContext`. Die Erweiterung der Klasse erfolgt mit einer `partial class AlbumSet`. Dazu erstellen wir eine neue Datei `AlbumSetEx.cs` im Ordner `DataContext`. Diese Datei hat folgenden Inhalt:
+
+```csharp
+#if GENERATEDCODE_ON
+using SEMusicStoreAngular.Logic.Entities;
+
+namespace SEMusicStoreAngular.Logic.DataContext
+{
+    partial class AlbumSet
+    {
+        internal override IQueryable<Album> ExecuteAsQuerySet()
+        {
+            return base.ExecuteAsQuerySet().Include(e => e.Artist);
+        }
+    }
+}
+#endif
+```
+
+> **HINWEIS:** Diese Klasse wird von der `CodeGenerierung` automatisch erstellt. Daher muss das `Define`GENERATEDCODE_ON geprüft werden. Fall das nicht gesetzt ist, wird beim Löschen der generierten Dateien ein Kompilierfehler ausgeworfen.
+
+Die Auflösung der `ManyToOne`-Beziehung erfolgt bei der Abfrage des `QuerySet`. Dazu muss die Methode `ExecuteAsQuerySet` überschrieben werden. Abfragen auf die Entity-`Album` erfolgen immer über dieses `Set` und daher wird die `ManyToOne`-Beziehung über die `Include`-Anweisung im **EntityFramework** aufgelöst.
+
+Im nächsten Schritt muss das `Album`-Model im `WebApi`-Projekt im Ordner `Models` angepasst werden. Dazu erstellen wir ebenfalls eine `partial class Album`. Dazu erstellen wir eine neue Datei `AlbumEx.cs` im Ordner `Models`. Diese Datei hat folgenden Inhalt:
+
+```csharp
+#if GENERATEDCODE_ON
+namespace SEMusicStoreAngular.WebApi.Models
+{
+    partial class Album
+    {
+        public Artist? Artist { get; set; }
+    }
+}
+#endif
+```
+
+Diese Erweiterung ist notwendig, damit die Daten des `Artist` in der `WebApi`-Anwendung zur Verfügung stehen. Diese Erweiterung wird ebenfalls von der `CodeGenerierung` automatisch erstellt. Daher muss das `Define`GENERATEDCODE_ON geprüft werden.
+
+Der letzte Schritt besteht darin, die Klasse `AlbumsController` im `WebApi`-Projekt anzupassen. Die `Artist`-Daten werden bereits vom `Logic`-Projekt bereitgestellt. Nun müssen diese Daten über die `REST-Api`übertragen werden. Die Anpassung des `AlbumsController` erfolgt ebenfalls in einer `partial class AlbumsController`. Dazu erstellen wir eine neue Datei `AlbumsControllerEx.cs` im Ordner `Controllers`. Diese Datei hat folgenden Inhalt:
+
+```csharp
+#if GENERATEDCODE_ON
+namespace SEMusicStoreAngular.WebApi.Controllers
+{
+    partial class AlbumsController
+    {
+        partial void AfterToModel(Logic.Entities.Album entity, Models.Album model)
+        {
+            if (entity.Artist != null)
+            {
+                model.Artist = new();
+
+                ((CommonContracts.IArtist)model.Artist).CopyProperties(entity.Artist);
+            }
+        }
+    }
+}
+#endif
+```
+
+Falls die `ManyToOne`-Beziehung aufgelöst werden soll, dann muss die Methode `AfterToModel` überschrieben werden. Diese Methode wird von der `CodeGenerierung` automatisch erstellt. Daher muss das `Define`GENERATEDCODE_ON geprüft werden.
+Ist das `Artist`-Objekt definert, dann wird das `Artist`-Objekt in das `Model`-Objekt kopiert. Diese Methode wird aufgerufen, wenn die Daten von der `Logic`-Schicht in die `WebApi`-Schicht übertragen werden.
+
+**Test:** Starten Sie die Anwendung `SEMusicStoreAngular.WebApi` und rufen Sie die URL `https://localhost:7074/api/Albums` auf. Es sollte eine Liste mit den Alben angezeigt werden. Diese Liste enthält auch die Daten des `Artist`:
+
+```json
+[
+  {
+    "id": 1,
+    "title": "For Those About To Rock We Salute You",
+    "artist": {
+      "id": 1,
+      "name": "AC/DC"
+    },
+    ...
+  },
+  ...
+]
+```
+
+> **HINWEIS:** Falls die `ManyToOne`-Beziehung nicht aufgelöst ist, überprüfen Sie bitte nochmals die angeführten Schritte.
+
+Nun erstellen Sie ein Eingabeformular für das Entity-`Album`. Die Vorgehensweise ist die gleiche wie bei der Entity-`Genre`. Sie müssen lediglich die Namen der Dateien und die Namen der Klassen anpassen. Die Dateien `album-list.component.ts`, `album-list.component.html`, `album-edit.component.ts` und `album-edit.component.html` sind analog zu den Dateien `genre-list.component.ts`, `genre-list.component.html`, `genre-edit.component.ts` und `genre-edit.component.html` aufgebaut.
+
+Es gibt jedoch eine Ausnahme. In der Datei `album-edit.component.ts` muss die `ManyToOne`-Beziehung aufgelöst werden. Dazu muss die Methode `getArtistList` implementiert werden. Diese Methode wird aufgerufen, wenn die Komponente `AlbumEditComponent` gestartet wird. Der Inhalt der Datei `album-edit.component.ts` sieht wie folgt aus:
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { IAlbum } from '@app/models/entities/i-album';
+import { IArtist } from '@app/models/entities/i-artist';
+import { ArtistService } from '@app/services/http/entities/artist-service';
+import { GenericEditComponent } from '@app/components/base/generic-edit.component';
+
+@Component({
+  selector: 'app-album-edit',
+  imports: [CommonModule, FormsModule],
+  templateUrl: './album-edit.component.html',
+  styleUrl: './album-edit.component.css'
+})
+export class AlbumEditComponent extends GenericEditComponent<IAlbum> implements OnInit {
+
+  public artists: IArtist[] = [];
+  constructor(
+    public override activeModal: NgbActiveModal,
+    private artistService: ArtistService) {
+    super(activeModal);
+  }
+
+  public get getArtistList(): IArtist[] {
+    return this.artists;
+  }
+
+  ngOnInit(): void {
+    this.artistService
+      .getAll()
+      .subscribe((artists: IArtist[]) => {
+        this.artists = artists.sort((a, b) => a.name.localeCompare(b.name));
+
+        if ((this.dataItem.artistId === null ||
+          this.dataItem.artistId === undefined) &&
+          this.artists.length > 0) {
+          this.dataItem.artistId = this.artists[0].id;
+        }
+      });
+  }
+
+  public override get title(): string {
+    return 'Album ' + super.title;
+  }
+}
+```
+
+Für das Laden der `Artist`-Daten wird der `ArtistService` verwendet. Dieser Service ist zusätzlich im Konstruktor aufgeführt und innerhalb der Komponente verfügbar. Zusätzlich verwenden wir die OnInit-Methode, um die `Artist`-Daten zu laden. Diese Methode wird aufgerufen, wenn die Komponente gestartet wird. Die `Artist`-Daten werden in der Methode `getArtistList` bereitgestellt. Diese Methode wird im Template verwendet, um die `Artist`-Daten anzuzeigen.
+
+Die Datei `album-edit.component.html` muss ebenfalls angepasst werden. Kopieren Sie den Inhalt der Datei `sampleItemEdit.html` im Ordner **SolutionItems** und fügen Sie diesen in die Datei `album-edit.component.html` ein. Passen Sie die Datei `album-edit.component.html` wie folgt an:
+
+```html
+<div *ngIf="dataItem" class="card mt-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3>{{ title }}</h3>
+    <button type="button" class="btn btn-sm btn-danger" aria-label="Schließen" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card-body">
+    <form (ngSubmit)="submitForm()" #editForm="ngForm">
+
+      <div class="mb-3">
+        <label for="artist" class="form-label">Artist</label>
+        <select id="artist" name="artistId" class="form-select" [(ngModel)]="dataItem.artistId" #artistId="ngModel"
+          required>
+          <option *ngFor="let artist of getArtistList" [ngValue]="artist.id">
+            {{ artist.name }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="artistId.invalid && artistId.touched">
+          Bitte wähle einen Artist.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Album</label>
+        <input class="form-control" [(ngModel)]="dataItem.title" name="title" required />
+      </div>
+
+      <button class="btn btn-success" type="submit">Speichern</button>
+      <button class="btn btn-secondary ms-2" type="button" (click)="cancelForm()">Abbrechen</button>
+    </form>
+  </div>
+</div>
+```
 
 **Viel Erfolg beim Umsetzen!**

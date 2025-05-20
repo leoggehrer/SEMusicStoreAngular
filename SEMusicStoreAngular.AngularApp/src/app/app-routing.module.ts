@@ -4,11 +4,15 @@ import { DashboardComponent } from './pages/dashboard/dashboard/dashboard.compon
 import { AuthGuard } from './guards/auth.guard';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { GenreListComponent } from './pages/genres/genre-list/genre-list.component';
+import { ArtistListComponent } from './pages/artists/artist-list/artist-list.component';
+import { AlbumListComponent } from './pages/albums/album-list/album-list.component';
 
 const routes: Routes = [
   // Öffentlicher Login-Bereich
   { path: 'auth/login', component: LoginComponent },
   { path: 'genres', component: GenreListComponent },
+  { path: 'artists', component: ArtistListComponent },
+  { path: 'albums', component: AlbumListComponent },
 
   // Geschützter Bereich mit Dashboard und Unterseiten
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
