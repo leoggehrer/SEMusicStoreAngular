@@ -27,7 +27,8 @@
       - [Schritt 14.D: Anpassen der Bearbeitung-Komponente für `Genre`](#schritt-14d-anpassen-der-bearbeitung-komponente-für-genre)
     - [Schritt 15: Eingabeformular für die Entity-`Artist` erstellen](#schritt-15-eingabeformular-für-die-entity-artist-erstellen)
     - [Schritt 16: Eingabeformular für die Entity-`Album` erstellen](#schritt-16-eingabeformular-für-die-entity-album-erstellen)
-      - [Schritt 16.A: Option 1: Auflösung der `ManyToOne`-Beziehung](#schritt-16a-option-1-auflösung-der-manytoone-beziehung)
+      - [Schritt 16.A: Option 1: Auflösung der `ManyToOne`-Beziehung in der `Logic`-Schicht](#schritt-16a-option-1-auflösung-der-manytoone-beziehung-in-der-logic-schicht)
+      - [Schritt 16.B: Option 2: Auflösung der `ManyToOne`-Beziehung mit einer `View`](#schritt-16b-option-2-auflösung-der-manytoone-beziehung-mit-einer-view)
 
 ---
 
@@ -49,29 +50,31 @@ Mit dem `SEMusicStoreBase` können Sie die Aufgabenstellung in wenigen Schritten
 
 **Umsetzungstabelle:**
 
-| Schritt | Beschreibung                                           |
-|---------|--------------------------------------------------------|
-| 1       | `SEMusicStoreBase` klonen                              |
-| 2       | `SEMusicStoreBase` mit der IDE öffnen                  |
-| 3       | Starten der Anwendung `TemplateTools.ConApp`           |
-| 4       | `SEMusicStoreBase` kopieren => `SEMusicStoreAngular`   |
-| 5       | `SEMusicStoreAngular` mit der IDE öffnen               |
-| 6       | Starten der Anwendung `TemplateTools.ConApp`           |
-| 7       | `Preprocessor` einstellen                              |
-| 8       | Starten der `CodeGenerierung`                          |
-| 9       | Starten der Anwendung `SEMusicStoreAngular.ConApp`     |
-| 10      | Starten der Anwendung `SEMusicStoreAngular.WebApi`     |
-| 11      | `SEMusicStoreAngular.AngularApp` mit **VSCode** öffnen |
-| 12      | Einstellung zur `REST-Api` prüfen                      |
-| 13      | Starten der `AngularApp` Anwendung                     |
-| 14      | Eingabeformular für die Entity-`Genre` erstellen       |
-| 14.A    | Erstellen der Übersicht-Komponente für `Genre`         |
-| 14.B    | Erstellen der Bearbeitung-Komponente für `Genre`       |
-| 14.C    | Anpassen der Übersicht-Komponente für `Genre`          |
-| 14.D    | Anpassen der Bearbeitung-Komponente für `Genre`        |
-| 15      | Eingabeformular für die Entity-`Artist` erstellen      |
-| 16      | Eingabeformular für die Entity-`Album` erstellen       |
-| 16.A    | Option 1: Auflösung der `ManyToOne`-Beziehung          |
+| Schritt | Beschreibung                                                         |
+|---------|----------------------------------------------------------------------|
+| 1       | `SEMusicStoreBase` klonen                                            |
+| 2       | `SEMusicStoreBase` mit der IDE öffnen                                |
+| 3       | Starten der Anwendung `TemplateTools.ConApp`                         |
+| 4       | `SEMusicStoreBase` kopieren => `SEMusicStoreAngular`                 |
+| 5       | `SEMusicStoreAngular` mit der IDE öffnen                             |
+| 6       | Starten der Anwendung `TemplateTools.ConApp`                         |
+| 7       | `Preprocessor` einstellen                                            |
+| 8       | Starten der `CodeGenerierung`                                        |
+| 9       | Starten der Anwendung `SEMusicStoreAngular.ConApp`                   |
+| 10      | Starten der Anwendung `SEMusicStoreAngular.WebApi`                   |
+| 11      | `SEMusicStoreAngular.AngularApp` mit **VSCode** öffnen               |
+| 12      | Einstellung zur `REST-Api` prüfen                                    |
+| 13      | Starten der `AngularApp` Anwendung                                   |
+| 14      | Eingabeformular für die Entity-`Genre` erstellen                     |
+| 14.A    | Erstellen der Übersicht-Komponente für `Genre`                       |
+| 14.B    | Erstellen der Bearbeitung-Komponente für `Genre`                     |
+| 14.C    | Anpassen der Übersicht-Komponente für `Genre`                        |
+| 14.D    | Anpassen der Bearbeitung-Komponente für `Genre`                      |
+| 15      | Eingabeformular für die Entity-`Artist` erstellen                    |
+| 16      | Eingabeformular für die Entity-`Album` erstellen                     |
+| 16.A    | Option 1: Auflösung der `ManyToOne`-Beziehung in der `Logic`-Schicht |
+| 16.B    | Option 2: Auflösung der `ManyToOne`-Beziehung mit einer `View`       |
+| 16.C    | Erstellen der Übersicht-Komponente die `AlbumArtist`                 |
 
 ### Schritt 1: Repository klonen
 
@@ -732,7 +735,7 @@ Nun erstellen wir das Eingabeformular für die Entity-`Album`. Der Unterschied z
 - **Option 2:** Für die Übersichtsseite wird eine **View** erstellt, welche aller erforderlichen Eigenschaften (wie den
 Artist-Namen) bereitstellt.
 
-#### Schritt 16.A: Option 1: Auflösung der `ManyToOne`-Beziehung
+#### Schritt 16.A: Option 1: Auflösung der `ManyToOne`-Beziehung in der `Logic`-Schicht
 
 Für die Auflösung der `ManyToOne`-Beziehung muss die Klasse `AlbumSet` erweitert werden. Diese Klasse befindet sich im `Logic`-Projekt im Ordner `DataContext`. Die Erweiterung der Klasse erfolgt mit einer `partial class AlbumSet`. Dazu erstellen wir eine neue Datei `AlbumSetEx.cs` im Ordner `DataContext`. Diese Datei hat folgenden Inhalt:
 
@@ -909,5 +912,56 @@ Die Datei `album-edit.component.html` muss ebenfalls angepasst werden. Kopieren 
   </div>
 </div>
 ```
+
+#### Schritt 16.B: Option 2: Auflösung der `ManyToOne`-Beziehung mit einer `View`
+
+In dieser Variant lösen wir die `ManyToOne`-Beziehung mit einer `View` auf. Die Definition der `View` erfolgt in Abhängigkeit der verwendeten Datenbank. Nachfolgend ist die Definition der `View` für die Datenbank `SQLite` und `MSSQL`:
+
+```sql
+CREATE VIEW IF NOT EXISTS AlbumArtists AS
+SELECT 
+al.Id AS AlbumId,
+al.Title AS AlbumTitle,
+ar.Id AS ArtistId,
+ar.Name AS ArtistName
+FROM Albums AS al
+LEFT JOIN Artists AS ar
+ON al.ArtistId = ar.Id;
+```
+
+Als nächstes erstellen wir eine neue View-Entity-`AlbumArtist` im Ordner `Entities/Views` mit den entsprechenden Eigenschaften. Diese Entity ist mit einem `View`-Attribut definiert und zeigt folgendes Gerüst:
+
+```csharp
+using SEMusicStoreAngular.Common.Modules.Attributes;
+
+namespace SEMusicStoreAngular.Logic.Entities.Views
+{
+    [View("AlbumArtists")]
+    public partial class AlbumArtist : ViewObject
+    {
+        public IdType AlbumId { get; set; }
+        public IdType ArtistId { get; set; }
+        public string AlbumTitle { get; set; } = string.Empty;
+        public string ArtistName { get; set; } = string.Empty;
+    }
+}
+```
+
+Nun starten Sie die `CodeGenerierung` und die `View`-Entity wird in das System integriert und mit der Datenbank `View` verbunden.
+
+**Test:** Starten Sie die Anwendung `SEMusicStoreAngular.WebApi` und rufen Sie die URL `https://localhost:7074/api/AlbumArtists` auf. Es sollte eine Liste mit den Alben angezeigt werden. Diese Liste enthält auch die Daten des `Artist`:
+
+```json
+[
+  {
+    "albumId": 1,
+    "artistId": 1,
+    "albumTitle": "For Those About To Rock We Salute You",
+    "artistName": "AC/DC"
+  },
+  ...
+]
+```
+
 
 **Viel Erfolg beim Umsetzen!**

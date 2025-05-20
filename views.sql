@@ -89,13 +89,13 @@ LEFT JOIN Genres AS g
 ON g.Id = tr.GenreId;
 
 
--- SQLITE: AlbumArtist
-CREATE VIEW IF NOT EXISTS AlbumArtist AS
+-- SQLITE: AlbumArtists
+CREATE VIEW IF NOT EXISTS AlbumArtists AS
 SELECT 
 al.Id AS AlbumId,
-al.Title AS Title,
+al.Title AS AlbumTitle,
 ar.Id AS ArtistId,
-ar.Name
+ar.Name AS ArtistName
 FROM Albums AS al
 LEFT JOIN Artists AS ar
 ON al.ArtistId = ar.Id;
