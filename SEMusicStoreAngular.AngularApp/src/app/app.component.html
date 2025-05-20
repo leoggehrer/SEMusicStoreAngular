@@ -4,15 +4,17 @@
 
     <!-- Hamburger Button -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <!-- Collapsible menu -->
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav ms-auto">
-        <!-- <li class="nav-item"><a class="nav-link" routerLink="/albums">Albums</a></li> -->
-        <!-- <li class="nav-item"><a class="nav-link" (click)="logout()">Logout</a></li> -->
+        <li class="nav-item"><a class="nav-link" routerLink="/albums">Albums</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/tracks">Tracks</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/artists">Artists</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/genres">Genres</a></li>
 
         <!-- Untermenue -->
         <li class="nav-item dropdown">
@@ -20,8 +22,10 @@
             Menü
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <!--<li><a class="dropdown-item" routerLink="/artistalbums">Artist-Albums</a></li>
-            <li><a class="dropdown-item" routerLink="/artisttracks">Artist-Tracks</a></li>-->
+            <li><a class="dropdown-item" routerLink="/genres">Genres</a></li>
+            <li><a class="dropdown-item" routerLink="/artists">Artists</a></li>
+            <li><a class="dropdown-item" routerLink="/albums">Albums</a></li>
+            <li><a class="dropdown-item" routerLink="/albumartists">Album und Artist</a></li>
           </ul>
         </li>
 
