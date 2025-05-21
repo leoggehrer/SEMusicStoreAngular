@@ -365,3 +365,4 @@ FodyWeavers.xsd
 #SEMusicStoreAngularStart
 #SEMusicStoreAngularEnd
 /SEMusicStoreAngularDb.db-wal
+/SEMusicStoreAngularDb.db
