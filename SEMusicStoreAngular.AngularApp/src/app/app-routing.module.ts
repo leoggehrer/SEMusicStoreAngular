@@ -11,13 +11,13 @@ import { AlbumArtistListComponent } from './pages/albumartists/album-artist-list
 const routes: Routes = [
   // Öffentlicher Login-Bereich
   { path: 'auth/login', component: LoginComponent },
-  { path: 'genres', component: GenreListComponent },
+  { path: 'genres', component: GenreListComponent, canActivate: [AuthGuard] },
   { path: 'artists', component: ArtistListComponent },
   { path: 'albums', component: AlbumListComponent },
   { path: 'albumartists', component: AlbumArtistListComponent },
 
   // Geschützter Bereich mit Dashboard und Unterseiten
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent },
 
   // Redirect von leerem Pfad auf Dashboard
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },

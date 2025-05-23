@@ -5,7 +5,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-message-box',
-  imports: [CommonModule ],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './message-box.component.html',})
 export class MessageBoxComponent {
   @Input() title = 'Nachricht';

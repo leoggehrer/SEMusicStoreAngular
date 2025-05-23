@@ -1,5 +1,5 @@
 ﻿//@CodeCopy
-export interface Logon {
+export interface ILogon {
   email: string;
   password: string;
 }

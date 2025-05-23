@@ -3,21 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageBoxService } from '@app/services/message-box-service.service';
-<<<<<<< HEAD
 import { IdType } from '@app/models/i-key-model';
 import { IAlbumArtist } from '@app/models/entities/views/i-album-artist';
 import { AlbumArtistService } from '@app/services/http/entities/views/album-artist-service';
+import { GenericViewListComponent } from '@app/components/base/generic-view-list.component';
 import { AlbumService } from '@app/services/http/entities/album-service';
 import { AlbumEditComponent } from '@app/components/album-edit/album-edit.component';
-import { GenericViewListComponent } from '@app/components/base/generic-view-list.component';
 import { Observable } from 'rxjs';
-=======
-import { IAlbumArtist } from '@app/models/entities/views/i-album-artist';
-import { AlbumArtistService } from '@app/services/http/entities/views/album-artist-service';
-import { GenericViewListComponent } from '@app/components/base/generic-view-list.component';
-import { AlbumService } from '@app/services/http/entities/album-service';
-import { AlbumEditComponent } from '@app/components/album-edit/album-edit.component';
->>>>>>> 034e6c8aff06d4d61c032b58f951e075f039e8e0
 
 /* Ersetzen Sie hier 'IViewEntity' durch den gewuenschten 'Type' (z.B.: 'IAlbum') */
 interface IItem extends IAlbumArtist {
@@ -25,7 +17,6 @@ interface IItem extends IAlbumArtist {
 }
 /* Ersetzen Sie in Component 'item-view' durch den gewuenschten Namen (z.B.: genre-statistics) */
 @Component({
-<<<<<<< HEAD
   selector: 'app-album-artist-list',
   imports: [CommonModule, FormsModule],
   templateUrl: './album-artist-list.component.html',
@@ -111,57 +102,5 @@ export class AlbumArtistListComponent extends GenericViewListComponent<IItem> im
   protected override getEditComponent() {
     return AlbumEditComponent;
   }
-=======
-    selector: 'app-album-artist-list',
-    imports: [CommonModule, FormsModule],
-    templateUrl: './album-artist-list.component.html',
-    styleUrl: './album-artist-list.component.css'
-})
-export class AlbumArtistListComponent extends GenericViewListComponent<IItem> implements OnInit {
-
-    constructor(
-        protected override modal: NgbModal,
-        protected dataAccessService: AlbumArtistService,
-        protected override messageBoxService: MessageBoxService,
-        private albumService: AlbumService) {
-        super(modal, dataAccessService, messageBoxService);
-    }
-
-    ngOnInit(): void {
-        // Passen Sie hier den Filter entsprechend an
-        this._queryParams.filter = 'albumTitle.Contains(@0)';
-        this.reloadData();
-    }
-
-    /* 
-    *  Passen Sie hier den Titel fuer die Ueberschtsseite an.
-    *  Default: Items
-    */
-    public override get pageTitle(): string {
-        return 'Album mit Artist';
-    }
-
-    /* 
-    *  Passen Sie hier den Titel fuer die Loeschbestaetigung an.
-    *  Default: id
-    */
-    public override getItemTitel(item: IItem): string {
-        return item.albumTitle;
-    }
-
-    /* 
-    *  Hier koennen Sie die Sortierung der Anzeige anpassen
-    *  z.B.: return items.sort((a, b) => a.name.localeCompare(b.name));
-    *  Default: keine Sortierung
-    */
-    protected override sortData(items: IItem[]): IItem[] {
-        return items.sort((a, b) => a.albumTitle.localeCompare(b.albumTitle));
-    }
-
-
-    protected override getEditComponent() {
-        return AlbumEditComponent;
-    }
->>>>>>> 034e6c8aff06d4d61c032b58f951e075f039e8e0
 }
 

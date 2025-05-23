@@ -30,7 +30,7 @@ export class AlbumListComponent extends GenericEntityListComponent<IItem> implem
 
     ngOnInit(): void {
         // Passen Sie hier den Filter entsprechend an
-        this._queryParams.filter = 'title.Contains(@0)';
+        this._queryParams.filter = 'artist.name.ToLower().Contains(@0) OR title.ToLower().Contains(@0)';
         this.reloadData();
     }
 

@@ -23,16 +23,19 @@ namespace SEMusicStoreAngular.WebApi.Controllers
             
             return Ok(result);
         }
-        
+
         /// <summary>
         /// This method performs a logout with the appropriate token.
         /// </summary>
         /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
-        [HttpPut("logout")]
-        public Task LogoutByAsync([FromBody] string sessionToken)
+        [HttpDelete("{sessionToken}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> LogoutByAsync(string sessionToken)
         {
-            return Logic.AccountAccess.LogoutAsync(sessionToken);
+            await Logic.AccountAccess.LogoutAsync(sessionToken).ConfigureAwait(false);
+
+            return NoContent();
         }
         
         /// <summary>

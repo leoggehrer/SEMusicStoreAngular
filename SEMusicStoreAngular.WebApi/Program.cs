@@ -21,6 +21,7 @@
                 options.AddDefaultPolicy(policy =>
                 {
                     policy.WithOrigins("http://localhost:54091")
+                          .AllowAnyOrigin()
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });

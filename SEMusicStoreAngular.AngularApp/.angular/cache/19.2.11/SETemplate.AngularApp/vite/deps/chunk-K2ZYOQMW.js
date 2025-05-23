@@ -1,6 +1,6 @@
 import {
   getDOM
-} from "./chunk-NT5Y5GDD.js";
+} from "./chunk-XJ3RHBCO.js";
 import {
   ChangeDetectorRef,
   Directive,
@@ -22,7 +22,6 @@ import {
   Version,
   booleanAttribute,
   computed,
-  forkJoin,
   forwardRef,
   inject,
   isPromise,
@@ -42,12 +41,15 @@ import {
   ɵɵdirectiveInject,
   ɵɵgetInheritedFactory,
   ɵɵlistener
-} from "./chunk-IST7VXXU.js";
+} from "./chunk-QKX4K7OQ.js";
+import {
+  forkJoin
+} from "./chunk-WPM5VTLQ.js";
 import {
   Subject,
   from,
   map
-} from "./chunk-U5YOOJV4.js";
+} from "./chunk-4S3KYZTJ.js";
 import {
   __spreadProps,
   __spreadValues
@@ -6863,4 +6865,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-XSM5CFHY.js.map
+//# sourceMappingURL=chunk-K2ZYOQMW.js.map
