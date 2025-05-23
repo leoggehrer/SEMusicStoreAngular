@@ -22,16 +22,20 @@
             Menü
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" routerLink="/genres">Genres</a></li>
-            <li><a class="dropdown-item" routerLink="/artists">Artists</a></li>
             <li><a class="dropdown-item" routerLink="/albums">Albums</a></li>
+            <li><a class="dropdown-item" routerLink="/tracks">Tracks</a></li>
+            <li><a class="dropdown-item" routerLink="/artists">Artists</a></li>
+            <li><a class="dropdown-item" routerLink="/genres">Genres</a></li>
             <li><a class="dropdown-item" routerLink="/albumartists">Album und Artist</a></li>
           </ul>
         </li>
 
-        <li>
-          <a type="button" (click)="logout()">Abmelden</a>
-        </li>
+        <!-- Abmelden-Button -->
+        <button *ngIf="isLoggedIn" 
+          class="btn btn-sm btn-outline-danger d-flex align-items-center" 
+          (click)="logout()">
+          <i class="bi bi-box-arrow-right me-2"></i>
+        </button>
 
       </ul>
     </div>

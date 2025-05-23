@@ -15,11 +15,11 @@ namespace SEMusicStoreAngular.WebApi.Controllers
         /// </summary>
         /// <param name="logonModel">The logon data.</param>
         /// <returns>The logon session object.</returns>
-        [HttpPost("logon")]
+        [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Models.Account.LoginSession>> LogonByAsync([FromBody] Models.Account.LogonModel logonModel)
+        public async Task<ActionResult<Models.Account.LoginSession>> LoginByAsync([FromBody] Models.Account.LogonModel logonModel)
         {
-            var result = await Logic.AccountAccess.LogonAsync(logonModel.Email, logonModel.Password, logonModel.Info ?? string.Empty);
+            var result = await Logic.AccountAccess.LoginAsync(logonModel.Email, logonModel.Password, logonModel.Info ?? string.Empty);
             
             return Ok(result);
         }

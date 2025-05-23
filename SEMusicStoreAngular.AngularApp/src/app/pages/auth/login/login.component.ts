@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { environment } from '@environment/environment';
 import { AuthService } from '@app-services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { HttpErrorResponse, HttpHeaderResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +27,7 @@ export class LoginComponent {
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
-    if (!environment.requireLogin) {
+    if (!environment.loginRequired) {
       this.router.navigateByUrl(this.returnUrl);
     }
   }
@@ -44,16 +44,11 @@ export class LoginComponent {
       else {
         this.error = 'Login fehlgeschlagen';
       }
-    } 
+    }
     catch (error) {
       if (error instanceof HttpErrorResponse) {
-        if (error.status === 500) {
-          this.error = 'Ungültige Anmeldedaten';
-        }
-        else {
-          this.error = `Login error: ${error.status} ${error.statusText}\n${error.message}`;
-        }
-      } 
+        this.error = `Login error: ${error.status} ${error.statusText}\n${error.message}`;
+      }
       else {
         this.error = 'Login error: An unknown error occurred.';
       }

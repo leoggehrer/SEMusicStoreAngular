@@ -1,9 +1,10 @@
 ﻿//@CodeCopy
 import { Injectable } from '@angular/core';
+import { environment } from '@environment/environment';
 import { ILogon } from '@app-models/account/i-logon';
 import { IAuthenticatedUser } from '@app-models/account/i-authenticated-user';
 import { AccountService } from '@app-services/http/base/account.service';
-import { StorageService } from './storage.service';
+import { StorageService } from '@app-services/storage.service';
 import { StorageLiterals } from '@app/literals/storage-literals';
 import { BehaviorSubject } from 'rxjs';
 
@@ -12,8 +13,16 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AuthService {
   public user?: IAuthenticatedUser;
-
   public authenticatedUserChanged = new BehaviorSubject(this.user);
+
+  public get isLoginRequired(): boolean {
+    return environment.loginRequired;
+  }
+  
+  public get isLoggedIn(): boolean {
+    return this.user != null;
+  }
+
   public isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     this.user != null
   );
@@ -58,7 +67,7 @@ export class AuthService {
       if (this.user) {
         await this.accountService.logout(this.user.sessionToken);
       }
-    } 
+    }
     finally {
       this.removeUserFromStorage();
       this.user = undefined;

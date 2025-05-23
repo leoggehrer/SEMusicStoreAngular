@@ -1,7 +1,6 @@
 ﻿import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { AuthService } from '@app-services/auth.service';
-import { environment } from '@environment/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,17 +17,17 @@ export class DashboardComponent {
   ];
 
   constructor(
-    private auth: AuthService, 
+    private authService: AuthService, 
     private router: Router) {
 
   }
 
-  public get requireLogin(): boolean {
-    return environment.requireLogin;
+  public get isLoginReqired(): boolean {
+    return this.authService.isLoginRequired;
   }
 
   public logout() {
-    this.auth.logout();
+    this.authService.logout();
     this.router.navigate(['/auth/login']);
   }
 }

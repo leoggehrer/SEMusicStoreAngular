@@ -7,14 +7,15 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   selector: 'app-message-box',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './message-box.component.html',})
+  templateUrl: './message-box.component.html',
+})
 export class MessageBoxComponent {
   @Input() title = 'Nachricht';
   @Input() message = '';
   @Input() okText = 'OK';
   @Input() cancelText?: string;
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal) { }
 
   public confirm() {
     this.activeModal.close(true);
