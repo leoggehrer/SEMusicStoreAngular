@@ -9,7 +9,12 @@ import { AuthService } from '@app-services/auth.service';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  public cards = [
+
+  public publicCards = [
+    { title: 'Dashboard', text: 'Übersicht', type: '/dashboard', bg: 'bg-primary text-white' },
+  ];
+
+  public authCards = [
     { title: 'Genre', text: 'Alle Genres im Musikladen', type: '/genres', bg: 'bg-primary text-white' },
     { title: 'Künstler', text: 'Eine Übersicht von bekannten Künstlern', type: '/artists', bg: 'bg-success text-white' },
     { title: 'Albums', text: 'Eine populäre Alben', type: '/albums', bg: 'bg-success text-white' },
@@ -26,8 +31,11 @@ export class DashboardComponent {
     return this.authService.isLoginRequired;
   }
 
+  public get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn;
+  }
+
   public logout() {
     this.authService.logout();
-    this.router.navigate(['/auth/login']);
   }
 }

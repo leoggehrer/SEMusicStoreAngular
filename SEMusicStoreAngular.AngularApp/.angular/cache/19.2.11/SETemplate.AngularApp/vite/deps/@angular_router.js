@@ -1,7 +1,7 @@
 import {
   Title
-} from "./chunk-FVSRPVTC.js";
-import "./chunk-HYAAP7FZ.js";
+} from "./chunk-PA65QH5V.js";
+import "./chunk-XBVQXFS6.js";
 import {
   HashLocationStrategy,
   LOCATION_INITIALIZED,
@@ -9,10 +9,10 @@ import {
   LocationStrategy,
   PathLocationStrategy,
   ViewportScroller
-} from "./chunk-UJOM7WOK.js";
+} from "./chunk-YFV2RW7X.js";
 import {
   DOCUMENT
-} from "./chunk-QHFSYY5L.js";
+} from "./chunk-QQHNXLDI.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
@@ -79,12 +79,12 @@ import {
   ɵɵloadQuery,
   ɵɵqueryRefresh,
   ɵɵsanitizeUrlOrResourceUrl
-} from "./chunk-H3TBNETM.js";
+} from "./chunk-QKX4K7OQ.js";
+import "./chunk-PEBH6BBU.js";
 import {
   defer,
   isObservable
 } from "./chunk-WPM5VTLQ.js";
-import "./chunk-PEBH6BBU.js";
 import {
   BehaviorSubject,
   ConnectableObservable,
@@ -122,7 +122,7 @@ import {
   __spreadValues
 } from "./chunk-EIB7IA3J.js";
 
-// node_modules/@angular/router/fesm2022/router-Dwfin5Au.mjs
+// node_modules/@angular/router/fesm2022/router-B-Y85L0c.mjs
 var PRIMARY_OUTLET = "primary";
 var RouteTitleKey = Symbol("RouteTitle");
 var ParamsAsMap = class {
@@ -1440,7 +1440,7 @@ var ChildrenOutletContexts = class _ChildrenOutletContexts {
   rootInjector;
   // contexts for child outlets, by name.
   contexts = /* @__PURE__ */ new Map();
-  /** @docs-private */
+  /** @nodoc */
   constructor(rootInjector) {
     this.rootInjector = rootInjector;
   }
@@ -1895,9 +1895,9 @@ var RouterOutlet = class _RouterOutlet {
   inputBinder = inject(INPUT_BINDER, {
     optional: true
   });
-  /** @docs-private */
+  /** @nodoc */
   supportsBindingToComponentInputs = true;
-  /** @docs-private */
+  /** @nodoc */
   ngOnChanges(changes) {
     if (changes["name"]) {
       const {
@@ -1914,7 +1914,7 @@ var RouterOutlet = class _RouterOutlet {
       this.initializeOutletWithName();
     }
   }
-  /** @docs-private */
+  /** @nodoc */
   ngOnDestroy() {
     if (this.isTrackedInParentContexts(this.name)) {
       this.parentContexts.onChildOutletDestroyed(this.name);
@@ -1924,7 +1924,7 @@ var RouterOutlet = class _RouterOutlet {
   isTrackedInParentContexts(outletName) {
     return this.parentContexts.getContext(outletName)?.outlet === this;
   }
-  /** @docs-private */
+  /** @nodoc */
   ngOnInit() {
     this.initializeOutletWithName();
   }
@@ -2138,46 +2138,6 @@ var RoutedComponentInputBinder = class _RoutedComponentInputBinder {
     type: Injectable
   }], null, null);
 })();
-var ɵEmptyOutletComponent = class _ɵEmptyOutletComponent {
-  static ɵfac = function ɵEmptyOutletComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _ɵEmptyOutletComponent)();
-  };
-  static ɵcmp = ɵɵdefineComponent({
-    type: _ɵEmptyOutletComponent,
-    selectors: [["ng-component"]],
-    exportAs: ["emptyRouterOutlet"],
-    decls: 1,
-    vars: 0,
-    template: function _EmptyOutletComponent_Template(rf, ctx) {
-      if (rf & 1) {
-        ɵɵelement(0, "router-outlet");
-      }
-    },
-    dependencies: [RouterOutlet],
-    encapsulation: 2
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ɵEmptyOutletComponent, [{
-    type: Component,
-    args: [{
-      template: `<router-outlet/>`,
-      imports: [RouterOutlet],
-      // Used to avoid component ID collisions with user code.
-      exportAs: "emptyRouterOutlet"
-    }]
-  }], null, null);
-})();
-function standardizeConfig(r) {
-  const children = r.children && r.children.map(standardizeConfig);
-  const c = children ? __spreadProps(__spreadValues({}, r), {
-    children
-  }) : __spreadValues({}, r);
-  if (!c.component && !c.loadComponent && (children || c.loadChildren) && c.outlet && c.outlet !== PRIMARY_OUTLET) {
-    c.component = ɵEmptyOutletComponent;
-  }
-  return c;
-}
 function createRouterState(routeReuseStrategy, curr, prevState) {
   const root = createNode(routeReuseStrategy, curr._root, prevState ? prevState._root : void 0);
   return new RouterState(root, curr);
@@ -3374,6 +3334,46 @@ var ROUTER_CONFIGURATION = new InjectionToken(typeof ngDevMode === "undefined" |
   providedIn: "root",
   factory: () => ({})
 });
+var ɵEmptyOutletComponent = class _ɵEmptyOutletComponent {
+  static ɵfac = function ɵEmptyOutletComponent_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _ɵEmptyOutletComponent)();
+  };
+  static ɵcmp = ɵɵdefineComponent({
+    type: _ɵEmptyOutletComponent,
+    selectors: [["ng-component"]],
+    exportAs: ["emptyRouterOutlet"],
+    decls: 1,
+    vars: 0,
+    template: function _EmptyOutletComponent_Template(rf, ctx) {
+      if (rf & 1) {
+        ɵɵelement(0, "router-outlet");
+      }
+    },
+    dependencies: [RouterOutlet],
+    encapsulation: 2
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ɵEmptyOutletComponent, [{
+    type: Component,
+    args: [{
+      template: `<router-outlet/>`,
+      imports: [RouterOutlet],
+      // Used to avoid component ID collisions with user code.
+      exportAs: "emptyRouterOutlet"
+    }]
+  }], null, null);
+})();
+function standardizeConfig(r) {
+  const children = r.children && r.children.map(standardizeConfig);
+  const c = children ? __spreadProps(__spreadValues({}, r), {
+    children
+  }) : __spreadValues({}, r);
+  if (!c.component && !c.loadComponent && (children || c.loadChildren) && c.outlet && c.outlet !== PRIMARY_OUTLET) {
+    c.component = ɵEmptyOutletComponent;
+  }
+  return c;
+}
 var ROUTES = new InjectionToken(ngDevMode ? "ROUTES" : "");
 var RouterConfigLoader = class _RouterConfigLoader {
   componentLoaders = /* @__PURE__ */ new WeakMap();
@@ -4484,7 +4484,7 @@ var Router = class _Router {
     this.config = config.map(standardizeConfig);
     this.navigated = false;
   }
-  /** @docs-private */
+  /** @nodoc */
   ngOnDestroy() {
     this.dispose();
   }
@@ -4751,7 +4751,7 @@ function isPublicRouterEvent(e) {
   return !(e instanceof BeforeActivateRoutes) && !(e instanceof RedirectRequest);
 }
 
-// node_modules/@angular/router/fesm2022/router_module-DTJgGWLd.mjs
+// node_modules/@angular/router/fesm2022/router_module-RgZPgAJ4.mjs
 var RouterLink = class _RouterLink {
   router;
   route;
@@ -4869,7 +4869,7 @@ var RouterLink = class _RouterLink {
     }
     this.applyAttributeValue("tabindex", newTabIndex);
   }
-  /** @docs-private */
+  /** @nodoc */
   // TODO(atscott): Remove changes parameter in major version as a breaking change.
   ngOnChanges(changes) {
     if (ngDevMode && isUrlTree(this.routerLinkInput) && (this.fragment !== void 0 || this.queryParams || this.queryParamsHandling || this.preserveFragment || this.relativeTo)) {
@@ -4903,7 +4903,7 @@ var RouterLink = class _RouterLink {
       this.setTabIndexIfNotOnNativeEl("0");
     }
   }
-  /** @docs-private */
+  /** @nodoc */
   onClick(button, ctrlKey, shiftKey, altKey, metaKey) {
     const urlTree = this.urlTree;
     if (urlTree === null) {
@@ -4926,7 +4926,7 @@ var RouterLink = class _RouterLink {
     this.router.navigateByUrl(urlTree, extras);
     return !this.isAnchorElement;
   }
-  /** @docs-private */
+  /** @nodoc */
   ngOnDestroy() {
     this.subscription?.unsubscribe();
   }
@@ -5141,7 +5141,7 @@ var RouterLinkActive = class _RouterLinkActive {
       }
     });
   }
-  /** @docs-private */
+  /** @nodoc */
   ngAfterContentInit() {
     of(this.links.changes, of(null)).pipe(mergeAll()).subscribe((_) => {
       this.update();
@@ -5161,11 +5161,11 @@ var RouterLinkActive = class _RouterLinkActive {
     const classes = Array.isArray(data) ? data : data.split(" ");
     this.classes = classes.filter((c) => !!c);
   }
-  /** @docs-private */
+  /** @nodoc */
   ngOnChanges(changes) {
     this.update();
   }
-  /** @docs-private */
+  /** @nodoc */
   ngOnDestroy() {
     this.routerEventsSubscription.unsubscribe();
     this.linkInputChangesSubscription?.unsubscribe();
@@ -5341,7 +5341,7 @@ var RouterPreloader = class _RouterPreloader {
   preload() {
     return this.processRoutes(this.injector, this.router.config);
   }
-  /** @docs-private */
+  /** @nodoc */
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -5426,7 +5426,7 @@ var RouterScroller = class _RouterScroller {
   lastSource = "imperative";
   restoredId = 0;
   store = {};
-  /** @docs-private */
+  /** @nodoc */
   constructor(urlSerializer, transitions, viewportScroller, zone, options = {}) {
     this.urlSerializer = urlSerializer;
     this.transitions = transitions;
@@ -5486,7 +5486,7 @@ var RouterScroller = class _RouterScroller {
       }, 0);
     });
   }
-  /** @docs-private */
+  /** @nodoc */
   ngOnDestroy() {
     this.routerEventsSubscription?.unsubscribe();
     this.scrollEventsSubscription?.unsubscribe();
@@ -5900,7 +5900,7 @@ function mapToCanDeactivate(providers) {
 function mapToResolve(provider) {
   return (...params) => inject(provider).resolve(...params);
 }
-var VERSION = new Version("19.2.12");
+var VERSION = new Version("19.2.10");
 export {
   ActivatedRoute,
   ActivatedRouteSnapshot,
@@ -5983,11 +5983,11 @@ export {
 };
 /*! Bundled license information:
 
-@angular/router/fesm2022/router-Dwfin5Au.mjs:
-@angular/router/fesm2022/router_module-DTJgGWLd.mjs:
+@angular/router/fesm2022/router-B-Y85L0c.mjs:
+@angular/router/fesm2022/router_module-RgZPgAJ4.mjs:
 @angular/router/fesm2022/router.mjs:
   (**
-   * @license Angular v19.2.12
+   * @license Angular v19.2.10
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)

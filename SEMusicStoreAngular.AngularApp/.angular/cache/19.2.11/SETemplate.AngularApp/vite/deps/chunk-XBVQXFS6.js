@@ -3,7 +3,7 @@ import {
   XhrFactory,
   isPlatformServer,
   parseCookieValue
-} from "./chunk-QHFSYY5L.js";
+} from "./chunk-QQHNXLDI.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
@@ -37,7 +37,7 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-H3TBNETM.js";
+} from "./chunk-QKX4K7OQ.js";
 import {
   Observable,
   concatMap,
@@ -55,7 +55,7 @@ import {
   __spreadValues
 } from "./chunk-EIB7IA3J.js";
 
-// node_modules/@angular/common/fesm2022/module-BQ-7fJZl.mjs
+// node_modules/@angular/common/fesm2022/module-CYx9OwZ_.mjs
 var HttpHandler = class {
 };
 var HttpBackend = class {
@@ -1242,7 +1242,6 @@ var FetchBackend = class _FetchBackend {
     optional: true
   })?.fetch ?? ((...args) => globalThis.fetch(...args));
   ngZone = inject(NgZone);
-  appRef = inject(ApplicationRef);
   handle(request) {
     return new Observable((observer) => {
       const aborter = new AbortController();
@@ -1296,14 +1295,8 @@ var FetchBackend = class _FetchBackend {
         let decoder;
         let partialText;
         const reqZone = typeof Zone !== "undefined" && Zone.current;
-        let canceled = false;
         yield this.ngZone.runOutsideAngular(() => __async(this, null, function* () {
           while (true) {
-            if (this.appRef.destroyed) {
-              yield reader.cancel();
-              canceled = true;
-              break;
-            }
             const {
               done,
               value
@@ -1327,10 +1320,6 @@ var FetchBackend = class _FetchBackend {
             }
           }
         }));
-        if (canceled) {
-          observer.complete();
-          return;
-        }
         const chunksAll = this.concatChunks(chunks, receivedLength);
         try {
           const contentType = response.headers.get(CONTENT_TYPE_HEADER) ?? "";
@@ -2333,7 +2322,6 @@ var HttpResourceImpl = class extends ResourceImpl {
           send({
             error
           });
-          abortSignal.removeEventListener("abort", onAbort);
         },
         complete: () => {
           if (resolve) {
@@ -2553,12 +2541,12 @@ export {
 };
 /*! Bundled license information:
 
-@angular/common/fesm2022/module-BQ-7fJZl.mjs:
+@angular/common/fesm2022/module-CYx9OwZ_.mjs:
 @angular/common/fesm2022/http.mjs:
   (**
-   * @license Angular v19.2.12
+   * @license Angular v19.2.10
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-HYAAP7FZ.js.map
+//# sourceMappingURL=chunk-XBVQXFS6.js.map

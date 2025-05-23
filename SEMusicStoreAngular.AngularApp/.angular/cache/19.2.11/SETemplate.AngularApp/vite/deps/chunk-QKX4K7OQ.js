@@ -3640,13 +3640,6 @@ function load(view, index) {
   ngDevMode && assertIndexInRange(view, index);
   return view[index];
 }
-function store(tView, lView, index, value) {
-  if (index >= tView.data.length) {
-    tView.data[index] = null;
-    tView.blueprint[index] = null;
-  }
-  lView[index] = value;
-}
 function getComponentLViewByIndex(nodeIndex, hostView) {
   ngDevMode && assertIndexInRange(hostView, nodeIndex);
   const slotValue = hostView[nodeIndex];
@@ -7270,27 +7263,6 @@ function invokeListeners(event, currentTarget) {
   }
   for (const handler of handlerFns) {
     handler(event);
-  }
-}
-var stashEventListeners = /* @__PURE__ */ new Map();
-function setStashFn(appId, fn) {
-  stashEventListeners.set(appId, fn);
-  return () => stashEventListeners.delete(appId);
-}
-var isStashEventListenerImplEnabled = false;
-var _stashEventListenerImpl = (lView, target, eventName, listenerFn) => {
-};
-function stashEventListenerImpl(lView, target, eventName, listenerFn) {
-  _stashEventListenerImpl(lView, target, eventName, listenerFn);
-}
-function enableStashEventListenerImpl() {
-  if (!isStashEventListenerImplEnabled) {
-    _stashEventListenerImpl = (lView, target, eventName, listenerFn) => {
-      const appId = lView[INJECTOR].get(APP_ID);
-      const stashEventListener = stashEventListeners.get(appId);
-      stashEventListener?.(target, eventName, listenerFn);
-    };
-    isStashEventListenerImplEnabled = true;
   }
 }
 var DEHYDRATED_BLOCK_REGISTRY = new InjectionToken(ngDevMode ? "DEHYDRATED_BLOCK_REGISTRY" : "");
@@ -12785,7 +12757,7 @@ var ComponentFactory2 = class extends ComponentFactory$1 {
     try {
       const cmpDef = this.componentDef;
       ngDevMode && verifyNotAnOrphanComponent(cmpDef);
-      const tAttributes = rootSelectorOrNode ? ["ng-version", "19.2.12"] : (
+      const tAttributes = rootSelectorOrNode ? ["ng-version", "19.2.10"] : (
         // Extract attributes and classes from the first selector only to match VE behavior.
         extractAttrsAndClassesFromSelector(this.componentDef.selectors[0])
       );
@@ -15809,43 +15781,35 @@ var Testability = class _Testability {
   registry;
   _isZoneStable = true;
   _callbacks = [];
-  _taskTrackingZone = null;
-  _destroyRef;
+  taskTrackingZone = null;
   constructor(_ngZone, registry, testabilityGetter) {
     this._ngZone = _ngZone;
     this.registry = registry;
-    if (isInInjectionContext()) {
-      this._destroyRef = inject(DestroyRef, {
-        optional: true
-      }) ?? void 0;
-    }
     if (!_testabilityGetter) {
       setTestabilityGetter(testabilityGetter);
       testabilityGetter.addToWindow(registry);
     }
     this._watchAngularEvents();
     _ngZone.run(() => {
-      this._taskTrackingZone = typeof Zone == "undefined" ? null : Zone.current.get("TaskTrackingZone");
+      this.taskTrackingZone = typeof Zone == "undefined" ? null : Zone.current.get("TaskTrackingZone");
     });
   }
   _watchAngularEvents() {
-    const onUnstableSubscription = this._ngZone.onUnstable.subscribe({
+    this._ngZone.onUnstable.subscribe({
       next: () => {
         this._isZoneStable = false;
       }
     });
-    const onStableSubscription = this._ngZone.runOutsideAngular(() => this._ngZone.onStable.subscribe({
-      next: () => {
-        NgZone.assertNotInAngularZone();
-        queueMicrotask(() => {
-          this._isZoneStable = true;
-          this._runCallbacksIfReady();
-        });
-      }
-    }));
-    this._destroyRef?.onDestroy(() => {
-      onUnstableSubscription.unsubscribe();
-      onStableSubscription.unsubscribe();
+    this._ngZone.runOutsideAngular(() => {
+      this._ngZone.onStable.subscribe({
+        next: () => {
+          NgZone.assertNotInAngularZone();
+          queueMicrotask(() => {
+            this._isZoneStable = true;
+            this._runCallbacksIfReady();
+          });
+        }
+      });
     });
   }
   /**
@@ -15875,10 +15839,10 @@ var Testability = class _Testability {
     }
   }
   getPendingTasks() {
-    if (!this._taskTrackingZone) {
+    if (!this.taskTrackingZone) {
       return [];
     }
-    return this._taskTrackingZone.macroTasks.map((t) => {
+    return this.taskTrackingZone.macroTasks.map((t) => {
       return {
         source: t.source,
         // From TaskTrackingZone:
@@ -15915,7 +15879,7 @@ var Testability = class _Testability {
    *    and no further updates will be issued.
    */
   whenStable(doneCb, timeout, updateCb) {
-    if (updateCb && !this._taskTrackingZone) {
+    if (updateCb && !this.taskTrackingZone) {
       throw new Error('Task tracking zone is required when passing an update callback to whenStable(). Is "zone.js/plugins/task-tracking" loaded?');
     }
     this.addCallback(doneCb, timeout, updateCb);
@@ -20197,6 +20161,13 @@ function listenToOutput(tNode, lView, directiveIndex, lookupName, eventName, lis
 function isOutputSubscribable(value) {
   return value != null && typeof value.subscribe === "function";
 }
+var stashEventListeners = /* @__PURE__ */ new Map();
+function setStashFn(appId, fn) {
+  stashEventListeners.set(appId, fn);
+}
+function clearStashFn(appId) {
+  stashEventListeners.delete(appId);
+}
 function ɵɵlistener(eventName, listenerFn, useCapture, eventTargetResolver) {
   const lView = getLView();
   const tView = getTView();
@@ -20257,7 +20228,9 @@ function listenerInternal(tView, lView, renderer, tNode, eventName, listenerFn, 
       processOutputs = false;
     } else {
       listenerFn = wrapListener(tNode, lView, listenerFn);
-      stashEventListenerImpl(lView, target, eventName, listenerFn);
+      const appId = lView[INJECTOR].get(APP_ID);
+      const stashEventListener = stashEventListeners.get(appId);
+      stashEventListener?.(target, eventName, listenerFn);
       const cleanupFn = renderer.listen(target, eventName, listenerFn);
       ngDevMode && ngDevMode.rendererAddEventListener++;
       lCleanup.push(listenerFn, cleanupFn);
@@ -20507,6 +20480,13 @@ function ɵɵviewQuerySignal(target, predicate, flags, read) {
 }
 function ɵɵqueryAdvance(indexOffset = 1) {
   setCurrentQueryIndex(getCurrentQueryIndex() + indexOffset);
+}
+function store(tView, lView, index, value) {
+  if (index >= tView.data.length) {
+    tView.data[index] = null;
+    tView.blueprint[index] = null;
+  }
+  lView[index] = value;
 }
 function ɵɵreference(index) {
   const contextLView = getContextLView();
@@ -21207,10 +21187,6 @@ function ɵsetClassDebugInfo(type, debugInfo) {
     def.debugInfo = debugInfo;
   }
 }
-function ɵɵgetReplaceMetadataURL(id, timestamp, base) {
-  const url = `./@ng/component?c=${id}&t=${encodeURIComponent(timestamp)}`;
-  return new URL(url, base).href;
-}
 function ɵɵreplaceMetadata(type, applyMetadata, namespaces, locals, importMeta = null, id = null) {
   ngDevMode && assertComponentDef(type);
   const currentDef = getComponentDef(type);
@@ -21564,8 +21540,7 @@ var angularCoreEnv = /* @__PURE__ */ (() => ({
   "ɵɵtwoWayProperty": ɵɵtwoWayProperty,
   "ɵɵtwoWayBindingSet": ɵɵtwoWayBindingSet,
   "ɵɵtwoWayListener": ɵɵtwoWayListener,
-  "ɵɵreplaceMetadata": ɵɵreplaceMetadata,
-  "ɵɵgetReplaceMetadataURL": ɵɵgetReplaceMetadataURL
+  "ɵɵreplaceMetadata": ɵɵreplaceMetadata
 }))();
 var jitOptions = null;
 function setJitOptions(options) {
@@ -22367,7 +22342,7 @@ var Version = class {
     this.patch = parts.slice(2).join(".");
   }
 };
-var VERSION = new Version("19.2.12");
+var VERSION = new Version("19.2.10");
 var ModuleWithComponentFactories = class {
   ngModuleFactory;
   componentFactories;
@@ -24922,14 +24897,12 @@ function withEventReplay() {
         if (!appsWithEventReplay.has(appRef)) {
           const jsActionMap = inject(JSACTION_BLOCK_ELEMENT_MAP);
           if (shouldEnableEventReplay(injector)) {
-            enableStashEventListenerImpl();
             const appId = injector.get(APP_ID);
-            const clearStashFn = setStashFn(appId, (rEl, eventName, listenerFn) => {
+            setStashFn(appId, (rEl, eventName, listenerFn) => {
               if (rEl.nodeType !== Node.ELEMENT_NODE) return;
               sharedStashFunction(rEl, eventName, listenerFn);
               sharedMapFunction(rEl, jsActionMap);
             });
-            appRef.onDestroy(clearStashFn);
           }
         }
       },
@@ -24951,6 +24924,7 @@ function withEventReplay() {
             if (true) {
               const appId = injector.get(APP_ID);
               clearAppScopedEarlyEventContract(appId);
+              clearStashFn(appId);
             }
           });
           appRef.whenStable().then(() => {
@@ -26539,7 +26513,6 @@ export {
   CONTAINER_HEADER_OFFSET,
   SimpleChange,
   ɵɵNgOnChangesFeature,
-  store,
   ɵɵenableBindings,
   ɵɵdisableBindings,
   ɵɵrestoreView,
@@ -26815,6 +26788,7 @@ export {
   ɵɵcontentQuerySignal,
   ɵɵviewQuerySignal,
   ɵɵqueryAdvance,
+  store,
   ɵɵreference,
   ɵɵstyleMapInterpolate1,
   ɵɵstyleMapInterpolate2,
@@ -26875,7 +26849,6 @@ export {
   ɵɵtemplateRefExtractor,
   ɵɵgetComponentDepsFactory,
   ɵsetClassDebugInfo,
-  ɵɵgetReplaceMetadataURL,
   ɵɵreplaceMetadata,
   resetJitOptions,
   flushModuleScopingQueueAsMuchAsPossible,
@@ -26990,14 +26963,14 @@ export {
 @angular/core/fesm2022/primitives/signals.mjs:
 @angular/core/fesm2022/primitives/event-dispatch.mjs:
   (**
-   * @license Angular v19.2.12
+   * @license Angular v19.2.10
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 
 @angular/core/fesm2022/core.mjs:
   (**
-   * @license Angular v19.2.12
+   * @license Angular v19.2.10
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
@@ -27018,4 +26991,4 @@ export {
    * found in the LICENSE file at https://angular.dev/license
    *)
 */
-//# sourceMappingURL=chunk-H3TBNETM.js.map
+//# sourceMappingURL=chunk-QKX4K7OQ.js.map

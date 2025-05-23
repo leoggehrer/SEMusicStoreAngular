@@ -1,25 +1,50 @@
 ﻿<div class="container mt-5">
   <h1>Willkommen im Dashboard!</h1>
 
-  <div *ngIf="isLoginReqired">
-    <div class="alert alert-success">
-      <p>Nur eingeloggte Nutzer sehen diese Seite.</p>
-      <button class="btn btn-danger mt-2" (click)="logout()">Logout</button>
-    </div>
-  </div>
-</div>
+  <!-- Geschuetzter Bereich -->
+  <div *ngIf="isLoginReqired && isLoginReqired">
 
-<div class="container-fluid mt-4">
-  <div class="row">
-    <div class="col-md-3 mb-4" *ngFor="let card of cards">
-      <a [routerLink]="[card.type]" class="text-decoration-none">
-        <div class="card shadow-sm h-100" [ngClass]="card.bg">
-          <div class="card-body">
-            <h5 class="card-title">{{ card.title }}</h5>
-            <p class="card-text">{{ card.text }}</p>
-          </div>
+    <div class="container-fluid mt-4">
+
+      <div class="row">
+        <div class="col-md-3 mb-4" *ngFor="let card of publicCards">
+          <a [routerLink]="[card.type]" class="text-decoration-none">
+            <div class="card shadow-sm h-100" [ngClass]="card.bg">
+              <div class="card-body">
+                <h5 class="card-title">{{ card.title }}</h5>
+                <p class="card-text">{{ card.text }}</p>
+              </div>
+            </div>
+          </a>
         </div>
-      </a>
+      </div>
+
+      <hr />
+      
+      <div class="row">
+        <div class="col-md-3 mb-4" *ngFor="let card of authCards">
+          <a [routerLink]="[card.type]" class="text-decoration-none">
+            <div class="card shadow-sm h-100" [ngClass]="card.bg">
+              <div class="card-body">
+                <h5 class="card-title">{{ card.title }}</h5>
+                <p class="card-text">{{ card.text }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div *ngIf="isLoginReqired">
+        <hr />
+        <div *ngIf="isLoggedIn">
+          <button class="btn btn-danger mt-2" (click)="logout()">Logout</button>
+        </div>
+        <div *ngIf="!isLoggedIn">
+          <a class="btn btn-primary mt-2" [routerLink]="['/auth/login']">Login</a>
+        </div>
+      </div>
+
     </div>
+
   </div>
 </div>

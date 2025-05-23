@@ -3,7 +3,7 @@
     <a class="navbar-brand" routerLink="/dashboard">SEMusicStoreAngular</a>
 
     <!-- Hamburger Button -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+    <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
       aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -11,31 +11,15 @@
     <!-- Collapsible menu -->
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" routerLink="/albums">Albums</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/tracks">Tracks</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/artists">Artists</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/genres">Genres</a></li>
 
         <!-- Untermenue -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Menü
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" routerLink="/albums">Albums</a></li>
-            <li><a class="dropdown-item" routerLink="/tracks">Tracks</a></li>
-            <li><a class="dropdown-item" routerLink="/artists">Artists</a></li>
-            <li><a class="dropdown-item" routerLink="/genres">Genres</a></li>
-            <li><a class="dropdown-item" routerLink="/albumartists">Album und Artist</a></li>
-          </ul>
-        </li>
-
-        <!-- Abmelden-Button -->
-        <button *ngIf="isLoggedIn" 
-          class="btn btn-sm btn-outline-danger d-flex align-items-center" 
-          (click)="logout()">
-          <i class="bi bi-box-arrow-right me-2"></i>
-        </button>
+        <ng-container>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person me-2"></i>
+            </a>
+          </li>
+        </ng-container>
 
       </ul>
     </div>
