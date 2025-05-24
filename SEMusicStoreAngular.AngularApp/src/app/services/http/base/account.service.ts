@@ -12,7 +12,7 @@ import { firstValueFrom } from 'rxjs';
 export class AccountService {
   private BASE_URL = environment.API_BASE_URL + '/accounts';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   public async login(logonData: ILogon): Promise<IAuthenticatedUser> {
     return firstValueFrom(
@@ -31,7 +31,7 @@ export class AccountService {
 
   public isSessionAlive(sessionToken: string): Promise<boolean> {
     const body = { sessionToken };
-  
+
     return firstValueFrom(
       this.httpClient.post<boolean>(`${this.BASE_URL}/issessionalive`, body)
     );

@@ -18,11 +18,11 @@ export class AuthService {
   public get user(): IAuthenticatedUser | undefined {
     return this._user;
   }
-  
+
   public get isLoginRequired(): boolean {
     return environment.loginRequired;
   }
-  
+
   public get isLoggedIn(): boolean {
     return this._user != null;
   }
@@ -65,11 +65,11 @@ export class AuthService {
   }
 
   public async isSessionAlive(): Promise<boolean> {
-    if (this._user) { 
+    if (this._user) {
       return this.accountService.isSessionAlive(this._user.sessionToken);
     }
     return false;
-  } 
+  }
 
   public async requestPassword(email: string): Promise<any> {
     var res = await this.accountService.requestPassword(email);
