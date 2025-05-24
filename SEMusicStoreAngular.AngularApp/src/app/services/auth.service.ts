@@ -12,19 +12,23 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  public user?: IAuthenticatedUser;
-  public authenticatedUserChanged = new BehaviorSubject(this.user);
+  private _user?: IAuthenticatedUser;
+  public authenticatedUserChanged = new BehaviorSubject(this._user);
 
+  public get user(): IAuthenticatedUser | undefined {
+    return this._user;
+  }
+  
   public get isLoginRequired(): boolean {
     return environment.loginRequired;
   }
   
   public get isLoggedIn(): boolean {
-    return this.user != null;
+    return this._user != null;
   }
 
   public isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    this.user != null
+    this._user != null
   );
 
   constructor(
@@ -39,13 +43,33 @@ export class AuthService {
       password: password,
     } as ILogon;
 
-    this.user = await this.accountService.login(logonData);
-    if (this.user) {
-      this.updateUserInStorage(this.user);
+    this._user = await this.accountService.login(logonData);
+    if (this._user) {
+      this.updateUserInStorage(this._user);
       this.notifyForUserChanged();
     }
-    return this.user;
+    return this._user;
   }
+
+  public async logout() {
+    try {
+      if (this._user) {
+        await this.accountService.logout(this._user.sessionToken);
+      }
+    }
+    finally {
+      this.removeUserFromStorage();
+      this._user = undefined;
+      this.notifyForUserChanged();
+    }
+  }
+
+  public async isSessionAlive(): Promise<boolean> {
+    if (this._user) { 
+      return this.accountService.isSessionAlive(this._user.sessionToken);
+    }
+    return false;
+  } 
 
   public async requestPassword(email: string): Promise<any> {
     var res = await this.accountService.requestPassword(email);
@@ -62,28 +86,19 @@ export class AuthService {
     return res;
   }
 
-  public async logout() {
-    try {
-      if (this.user) {
-        await this.accountService.logout(this.user.sessionToken);
-      }
-    }
-    finally {
-      this.removeUserFromStorage();
-      this.user = undefined;
-      this.notifyForUserChanged();
-    }
+  public resetUser() {
+    this._user = undefined;
+    this.removeUserFromStorage();
+    this.notifyForUserChanged();
   }
 
   private notifyForUserChanged() {
-    this.authenticatedUserChanged.next(this.user);
-    this.isAuthenticated.next(!!this.user);
+    this.authenticatedUserChanged.next(this._user);
+    this.isAuthenticated.next(!!this._user);
   }
 
   private loadUserFromStorage() {
-    this.user = this.storageService.getData(
-      StorageLiterals.USER
-    ) as IAuthenticatedUser;
+    this._user = this.storageService.getData(StorageLiterals.USER) as IAuthenticatedUser;
     this.notifyForUserChanged();
   }
 

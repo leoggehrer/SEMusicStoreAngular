@@ -29,6 +29,14 @@ export class AccountService {
     );
   }
 
+  public isSessionAlive(sessionToken: string): Promise<boolean> {
+    const body = { sessionToken };
+  
+    return firstValueFrom(
+      this.httpClient.post<boolean>(`${this.BASE_URL}/issessionalive`, body)
+    );
+  }
+
   public async requestPassword(email: string): Promise<any> {
     return firstValueFrom(
       this.httpClient.post<IAuthenticatedUser>(

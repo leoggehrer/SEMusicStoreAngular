@@ -1,11 +1,9 @@
 ﻿<div class="container mt-5">
   <h1>Willkommen im Dashboard!</h1>
 
-  <!-- Geschuetzter Bereich -->
-  <div *ngIf="isLoginReqired && isLoginReqired">
-
     <div class="container-fluid mt-4">
 
+      <!-- Oeffentliche Karten -->
       <div class="row">
         <div class="col-md-3 mb-4" *ngFor="let card of publicCards">
           <a [routerLink]="[card.type]" class="text-decoration-none">
@@ -21,6 +19,7 @@
 
       <hr />
       
+     <!-- Geschuetzter Karten -->
       <div class="row">
         <div class="col-md-3 mb-4" *ngFor="let card of authCards">
           <a [routerLink]="[card.type]" class="text-decoration-none">
@@ -43,8 +42,6 @@
           <a class="btn btn-primary mt-2" [routerLink]="['/auth/login']">Login</a>
         </div>
       </div>
-
-    </div>
 
   </div>
 </div>

@@ -37,18 +37,23 @@ namespace SEMusicStoreAngular.WebApi.Controllers
 
             return NoContent();
         }
-        
+
         /// <summary>
-        /// This method checks whether the session token is still valid.
+        /// Checks whether the session token is still valid.
         /// </summary>
-        /// <param name="sessionToken">The session token that is checked.</param>
-        /// <returns>True if the token is still valid, false otherwise.</returns>
-        [HttpGet("issessionalive/{sessionToken}")]
+        /// <param name="sessionToken">The session token to validate.</param>
+        /// <returns>True if valid, otherwise false.</returns>
+        [HttpPost("issessionalive")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<bool>> IsSessionAliveAsync(string sessionToken)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<bool>> IsSessionAliveAsync([FromBody] Models.Account.SessionRequest sessionRequest)
         {
-            var result = await Logic.AccountAccess.IsSessionAliveAsync(sessionToken);
-            
+            if (sessionRequest == null || string.IsNullOrWhiteSpace(sessionRequest.SessionToken))
+                return BadRequest("Session token is required.");
+
+            var result = await Logic.AccountAccess.IsSessionAliveAsync(sessionRequest.SessionToken);
+
             return Ok(result);
         }
     }
