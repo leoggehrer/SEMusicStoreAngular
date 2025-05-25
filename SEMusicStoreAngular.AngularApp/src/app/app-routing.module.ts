@@ -6,6 +6,7 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { GenreListComponent } from './pages/genres/genre-list/genre-list.component';
 import { ArtistListComponent } from './pages/artists/artist-list/artist-list.component';
 import { AlbumListComponent } from './pages/albums/album-list/album-list.component';
+import { TrackListComponent } from './pages/tracks/track-list/track-list.component';
 import { AlbumArtistListComponent } from './pages/albumartists/album-artist-list/album-artist-list.component';
 
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'genres', component: GenreListComponent, canActivate: [AuthGuard] },
   { path: 'artists', component: ArtistListComponent, canActivate: [AuthGuard] },
   { path: 'albums', component: AlbumListComponent, canActivate: [AuthGuard] },
+  { path: 'tracks', component: TrackListComponent, canActivate: [AuthGuard] },
   { path: 'albumartists', component: AlbumArtistListComponent, canActivate: [AuthGuard] },
 
   // Redirect von leerem Pfad auf Dashboard

@@ -29,6 +29,10 @@
     - [Schritt 16: Eingabeformular für die Entity-`Album` erstellen](#schritt-16-eingabeformular-für-die-entity-album-erstellen)
       - [Schritt 16.A: Option 1: Auflösung der `ManyToOne`-Beziehung in der `Logic`-Schicht](#schritt-16a-option-1-auflösung-der-manytoone-beziehung-in-der-logic-schicht)
       - [Schritt 16.B: Option 2: Auflösung der `ManyToOne`-Beziehung mit einer `View`](#schritt-16b-option-2-auflösung-der-manytoone-beziehung-mit-einer-view)
+        - [Schritt 16.B.1: Starten der `CodeGenerierung`](#schritt-16b1-starten-der-codegenerierung)
+        - [Schritt 16.B.2: Eingabeformular für die Entity-`AlbumArtist` erstellen](#schritt-16b2-eingabeformular-für-die-entity-albumartist-erstellen)
+        - [Schritt 16.B.3: Anpassen der Übersicht-Komponente für `AlbumArtist`](#schritt-16b3-anpassen-der-übersicht-komponente-für-albumartist)
+    - [Schritt 17: Eingabeformular für die Entity-`Track` erstellen](#schritt-17-eingabeformular-für-die-entity-track-erstellen)
 
 ---
 
@@ -74,7 +78,10 @@ Mit dem `SEMusicStoreBase` können Sie die Aufgabenstellung in wenigen Schritten
 | 16      | Eingabeformular für die Entity-`Album` erstellen                     |
 | 16.A    | Option 1: Auflösung der `ManyToOne`-Beziehung in der `Logic`-Schicht |
 | 16.B    | Option 2: Auflösung der `ManyToOne`-Beziehung mit einer `View`       |
-| 16.C    | Erstellen der Übersicht-Komponente die `AlbumArtist`                 |
+| 16.B.1  | Starten der `CodeGenerierung`                                        |
+| 16.B.2  | Eingabeformular für die Entity-`AlbumArtist` erstellen               |
+| 16.B.3  | Anpassen der Übersicht-Komponente für `AlbumArtist`                  |
+| 17      | Eingabeformular für die Entity-`Track` erstellen                     |
 
 ### Schritt 1: Repository klonen
 
@@ -496,14 +503,14 @@ Als nächstes tragen wir den Aufruf der Komponente in das `Dashboard` ein:
 
 ```typescript
 ...
-  public cards = [
+  public publicCards = [
     { title: 'Genre', text: 'Alle Genres im Musikladen', type: '/genres', bg: 'bg-primary text-white' },
     { title: 'Item2', text: 'Ein Text für das Item2', type: '/items2', bg: 'bg-success text-white' },
   ];
 ...
 ```
 
-Nach dem Eintrag eingetragen worden ist, kann die Komponente `GenreList` im `Dashboard` aufgerufen werden. Aktivieren Sie im `Dashboard` die Karte `Genre`. Nun wird eine Seite mit der Ausgabe `genre-list works!` angezeigt.
+Nachdem der Eintrag eingetragen worden ist, kann die Komponente `GenreList` im `Dashboard` aufgerufen werden. Aktivieren Sie im `Dashboard` die Karte `Genre`. Nun wird eine Seite mit der Ausgabe `genre-list works!` angezeigt.
 
 #### Schritt 14.B: Erstellen der Bearbeitung-Komponente für `Genre`
 
@@ -963,5 +970,231 @@ Nun starten Sie die `CodeGenerierung` und die `View`-Entity wird in das System i
 ]
 ```
 
+##### Schritt 16.B.1: Starten der `CodeGenerierung`
+
+Nachdem die `View`-Entity erstellt wurde, müssen wir die `CodeGenerierung` erneut starten, um die Änderungen in das System zu integrieren. Starten Sie das Programm `TemplateTools.ConApp` und wählen Sie die **Menü-Option:** 4 - `CodeGenerator` aus. Anschließend wählen Sie die **Menü-option:** 9 - `Start` aus. Die `CodeGenerierung` startet und generiert die entsprechenden Code-Teile.
+
+##### Schritt 16.B.2: Eingabeformular für die Entity-`AlbumArtist` erstellen
+
+In diesem Schritt erstellen wir ein Eingabeformular für die Entity-`AlbumArtist`. Die Vorgehensweise unterscheidet sich von der Entity-`Genre`.
+
+Zuerst erstellen wir die Übersichtskomponente für die Entity-`AlbumArtist`. Geben Sie nun den folgenden **Befehl** im Terminal von **VSCode** ein:
+
+```bash
+ng g c pages/albumartists/AlbumArtistList --standalone
+```
+
+Dieser Befehl erstellt eine neue Komponente mit dem Namen `AlbumArtistList` im Verzeichnis `pages/albumartits`. Diese Komponente ist eine **Standalone**-Komponente. Das bedeutet, dass die Komponente keine Abhängigkeiten zu anderen Modulen hat.
+
+Die Komponente `AlbumArtistList` muss in das `routing` eingetragen werden. Dazu fügen Sie folgenden Eintrag in `app-routing.module.ts` hinzu:
+
+```typescript
+import { AlbumArtistListComponent } from './pages/albumartists/album-artist-list/album-artist-list.component';
+
+const routes: Routes = [
+  ...
+  { path: 'albumartists', component: AlbumArtistListComponent },
+  ...
+]
+...
+```
+
+Als nächstes tragen wir den Aufruf der Komponente in das `Dashboard` ein:
+
+Öffnen Sie die Datei `dashboart.component.ts` und fügen Sie folgenden Eintrag hinzu:
+
+```typescript
+...
+  public publicCards = [
+    ...,
+    { title: 'Album mit Artist', text: 'Alle Alben mit den zugehörigen Künstlern', type: '/albumartists', bg: 'bg-info text-white' },
+  ];
+...
+```
+
+Nachdem der Eintrag eingetragen worden ist, kann die Komponente `AlbumArtistList` im `Dashboard` aufgerufen werden. Aktivieren Sie im `Dashboard` die Karte `Album mit Artist`. Nun wird eine Seite mit der Ausgabe `album-artist-list works!` angezeigt.
+
+##### Schritt 16.B.3: Anpassen der Übersicht-Komponente für `AlbumArtist`
+
+Nun muss die Komponente entsprechend angepasst werden. Kopieren Sie das Programm aus der Datei `sampleItemViewList.ts` im Ordner **SolutionItems** und fügen Sie dieses Programm in die Datei `album-artist-list.component.ts` ein. Passen Sie die Datei `album-artist-list.component.ts` wie folgt an:
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MessageBoxService } from '@app/services/message-box-service.service';
+import { IdType } from '@app/models/i-key-model';
+import { IAlbumArtist } from '@app/models/entities/views/i-album-artist';
+import { AlbumArtistService } from '@app/services/http/entities/views/album-artist-service';
+import { GenericViewListComponent } from '@app/components/base/generic-view-list.component';
+import { AlbumService } from '@app/services/http/entities/album-service';
+import { AlbumEditComponent } from '@app/components/album-edit/album-edit.component';
+import { Observable } from 'rxjs';
+
+/* Ersetzen Sie hier 'IViewEntity' durch den gewuenschten 'Type' (z.B.: 'IAlbum') */
+interface IItem extends IAlbumArtist {
+
+}
+/* Ersetzen Sie in Component 'item-view' durch den gewuenschten Namen (z.B.: genre-statistics) */
+@Component({
+  selector: 'app-album-artist-list',
+  imports: [CommonModule, FormsModule],
+  templateUrl: './album-artist-list.component.html',
+  styleUrl: './album-artist-list.component.css'
+})
+export class AlbumArtistListComponent extends GenericViewListComponent<IItem> implements OnInit {
+
+  constructor(
+    protected override modal: NgbModal,
+    protected dataAccessService: AlbumArtistService,
+    protected override messageBoxService: MessageBoxService,
+    private albumService: AlbumService) {
+    super(modal, dataAccessService, messageBoxService);
+  }
+
+  ngOnInit(): void {
+    // Passen Sie hier den Filter entsprechend an
+    this._queryParams.filter = 'albumTitle.Contains(@0)';
+    this.reloadData();
+  }
+
+  /* 
+  *  Passen Sie hier den Titel fuer die Ueberschtsseite an.
+  *  Default: Items
+  */
+  public override get pageTitle(): string {
+    return 'Album mit Artist';
+  }
+
+  /* 
+  *  Passen Sie hier den Titel fuer die Loeschbestaetigung an.
+  *  Default: id
+  */
+  public override getItemTitel(item: IItem): string {
+    return item.albumTitle;
+  }
+
+  /* 
+  *  Hier koennen Sie die Sortierung der Anzeige anpassen
+  *  z.B.: return items.sort((a, b) => a.name.localeCompare(b.name));
+  *  Default: keine Sortierung
+  */
+  protected override sortData(items: IItem[]): IItem[] {
+    return items.sort((a, b) => (a.artistName + a.albumTitle).localeCompare(b.artistName + b.albumTitle));
+  }
+
+  override get canAdd(): boolean {
+    return true;
+  }
+
+  override get canEdit(): boolean {
+    return true;
+  }
+
+  override get canDelete(): boolean {
+    return true;
+  }
+
+  override get canRefresh(): boolean {
+    return true;
+  }
+
+  protected override getItemKey(item: IItem): IdType {
+    return item.albumId;
+  }
+
+  protected override queryItem(key: IdType): Observable<any> {
+    return this.albumService.getById(key);
+  }
+
+  protected override addItem(item: any): Observable<any> {
+    return this.albumService.create(item);
+  }
+
+  protected override updateItem(item: any): Observable<any> {
+    return this.albumService.update(item);
+  }
+
+  protected override deleteItem(item: any): Observable<any> {
+    return this.albumService.delete(item);
+  }
+
+  protected override getEditComponent() {
+    return AlbumEditComponent;
+  }
+}
+```
+
+Der eingefügte Code ist eine angepasste Version der `GenericViewListComponent`, die speziell für die Entity-`AlbumArtist` erstellt wurde. Diese Komponente zeigt eine Liste von Alben mit den zugehörigen Künstlern an und ermöglicht die Durchführung von `CRUD`-Operationen. Damit die `CRUD`-Operationen funktionieren, müssen die entsprechendn Methoden überschrieben werden. Die Standard-Werte für `canAdd()`, `canEdit()`, `canDelete()` usw. sind abgeschaltet. Je nach Bedarf müssen die Operation eingaschaltet werden. Bei der Methode `protected override getEditComponent()` kann die bereits definierte Komponente `AlbumEditComponent` verwendet werden.
+
+Die Datei `album-artist-list.component.html` muss ebenfalls angepasst werden. Kopieren Sie den Inhalt der Datei `sampleItemViewList.html` im Ordner **SolutionItems** und fügen Sie diesen in die Datei `album-artist-list.component.html` ein. Passen Sie die Datei `album-artist-list.component.html` wie folgt an:
+
+```html
+<div class="container mt-4">
+    <h3 class="mb-4">{{pageTitle}}</h3>
+
+    <div class="d-flex mb-3">
+        <!-- Aktion: Neues Element hinzufuegen -->
+        <button *ngIf="canAdd"
+                class="btn btn-primary me-2"
+                (click)="addCommand()">
+            <i class="bi bi-plus"></i>
+        </button>
+        <!-- Suchtext -->
+        <input *ngIf="canSearch"
+               type="text"
+               class="form-control me-2"
+               [(ngModel)]="searchTerm"
+               placeholder="🔍 Suche nach..." />
+        <!-- Aktion: Daten neu Laden -->
+        <button *ngIf="canRefresh"
+                class="btn btn-success me-2"
+                (click)="reloadData()">
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
+    </div>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <!-- Hier werden die Spalten-Bezeichner konfiguriert -->
+                <th>Artist</th>
+                <th>Album</th>
+                <th *ngIf="canEdit || canDelete"
+                    style="white-space: nowrap; width: 1%;">
+                    Aktion
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of dataItems">
+                <!-- Hier werden die Spalten-Werte konfiguriert -->
+                <td><strong>{{ item.artistName }}</strong></td>
+                <td>{{ item.albumTitle }}</td>
+                <!-- Aktion-Spalte: Bearbeiten und Loeschen -->
+                <td *ngIf="canEdit || canDelete">
+                    <div class="d-flex gap-1">
+                        <button *ngIf="canEdit"
+                                class="btn btn-sm btn-outline-secondary me-2"
+                                (click)="editCommand(item)">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button *ngIf="canDelete"
+                                class="btn btn-sm btn-outline-danger"
+                                (click)="deleteCommand(item)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+```
+
+### Schritt 17: Eingabeformular für die Entity-`Track` erstellen
+
+Nun erstellen Sie ein Eingabeformular für die Entity-`Track`. Die Vorgehensweise ist die gleiche wie bei der Entity-`Album` **Option A**. Sie müssen lediglich die Namen der Dateien und die Namen der Klassen anpassen. Die Dateien `artist-list.component.ts`, `track-list.component.html`, `track-edit.component.ts` und `track-edit.component.html` sind analog zu den Dateien `album-list.component.ts`, `album-list.component.html`, `album-edit.component.ts` und `album-edit.component.html` aufgebaut.
 
 **Viel Erfolg beim Umsetzen!**

@@ -2,6 +2,19 @@
 import { Component } from '@angular/core';
 import { AuthService } from '@app-services/auth.service';
 
+export class DashboardCard {
+  title: string;
+  text: string;
+  type: string;
+  bg: string;
+  constructor(title: string, text: string, type: string, bg: string) {
+    this.title = title;
+    this.text = text;
+    this.type = type;
+    this.bg = bg;
+  }
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: false,
@@ -10,15 +23,15 @@ import { AuthService } from '@app-services/auth.service';
 })
 export class DashboardComponent {
 
-  public publicCards = [
-    { title: 'Dashboard', text: 'Übersicht', type: '/dashboard', bg: 'bg-primary text-white' },
-  ];
-
-  public authCards = [
+  public publicCards: DashboardCard[] = [
     { title: 'Genre', text: 'Alle Genres im Musikladen', type: '/genres', bg: 'bg-primary text-white' },
     { title: 'Künstler', text: 'Eine Übersicht von bekannten Künstlern', type: '/artists', bg: 'bg-success text-white' },
-    { title: 'Albums', text: 'Eine populäre Alben', type: '/albums', bg: 'bg-success text-white' },
-    { title: 'Album mit Artist', text: 'Eine populäre Alben (Version 2)', type: '/albumartists', bg: 'bg-success text-white' },
+    { title: 'Albums', text: 'Eine Vielzahl von populäre Alben (Version 1)', type: '/albums', bg: 'bg-success text-white' },
+    { title: 'Tracks', text: 'Viele bekannte Songs', type: '/tracks', bg: 'bg-success text-white' },
+    { title: 'Album mit Artist', text: 'Eine Vielzahl von populäre Alben (Version 2)', type: '/albumartists', bg: 'bg-success text-white' },
+  ];
+
+  public authCards: DashboardCard[] = [
   ];
 
   constructor(

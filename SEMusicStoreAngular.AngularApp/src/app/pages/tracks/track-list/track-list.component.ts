@@ -3,34 +3,34 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageBoxService } from '@app/services/message-box-service.service';
-import { IArtist } from '@app/models/entities/i-artist';
-import { ArtistService } from '@app/services/http/entities/artist-service';
-import { ArtistEditComponent } from '@app/components/artist-edit/artist-edit.component';
+import { ITrack } from '@app/models/entities/i-track';
+import { TrackService } from '@app/services/http/entities/track-service';
+import { TrackEditComponent } from '@app/components/track-edit/track-edit/track-edit.component';
 import { GenericEntityListComponent } from '@app/components/base/generic-entity-list.component';
 
 /* Ersetzen Sie hier 'IKey' durch den gewuenschten 'Type' (z.B.: 'IAlbum') */
-interface IItem extends IArtist {
+interface IItem extends ITrack {
 
 }
 /* Ersetzen Sie in Component 'item' durch den gewuenschten Namen (z.B.: album) */
 @Component({
-    selector: 'app-artist-list',
+    selector: 'app-track-list',
     imports: [CommonModule, FormsModule],
-    templateUrl: './artist-list.component.html',
-    styleUrl: './artist-list.component.css'
+    templateUrl: './track-list.component.html',
+    styleUrl: './track-list.component.css'
 })
-export class ArtistListComponent extends GenericEntityListComponent<IItem> implements OnInit {
+export class TrackListComponent extends GenericEntityListComponent<IItem> implements OnInit {
 
     constructor(
         protected override modal: NgbModal,
-        protected dataAccessService: ArtistService,
+        protected dataAccessService: TrackService,
         protected override messageBoxService: MessageBoxService) {
         super(modal, dataAccessService, messageBoxService);
     }
 
     ngOnInit(): void {
         // Passen Sie hier den Filter entsprechend an
-        this._queryParams.filter = 'name.Contains(@0)';
+        this._queryParams.filter = 'album.title.ToLower().Contains(@0)';
         this.reloadData();
     }
 
@@ -39,7 +39,7 @@ export class ArtistListComponent extends GenericEntityListComponent<IItem> imple
     *  Default: Items
     */
     public override get pageTitle(): string {
-        return 'Artists';
+        return 'Tracks';
     }
 
     /* 
@@ -47,7 +47,7 @@ export class ArtistListComponent extends GenericEntityListComponent<IItem> imple
     *  Default: id
     */
     public override getItemTitel(item: IItem): string {
-        return item.name;
+        return item.title;
     }
 
     /* 
@@ -56,7 +56,7 @@ export class ArtistListComponent extends GenericEntityListComponent<IItem> imple
     *  Default: keine Sortierung
     */
     protected override sortData(items: IItem[]): IItem[] {
-        return items.sort((a, b) => a.name.localeCompare(b.name));
+        return items.sort((a, b) => (a.album.title + a.title).localeCompare(b.album.title + b.title));
     }
 
     /*
@@ -65,7 +65,7 @@ export class ArtistListComponent extends GenericEntityListComponent<IItem> imple
     *  Default: keine Komponente
     */
     protected override getEditComponent() {
-        return ArtistEditComponent;
+        return TrackEditComponent;
     }
 }
 
