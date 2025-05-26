@@ -185,9 +185,9 @@ Wählen Sie die **Menü-Option:** 5 - `Start` aus. Das System kopiert nun die Pr
 
 ### Schritt 5: `SEMusicStoreAngular` mit der IDE öffnen
 
-Im nächsten Schritt öffnen Sie nun die Projektmappe `SEMusicStoreAngular` mit der IDE (Visual Studio, VSCode oder Rider). Nun haben Sie eine Projektstruktur die der Projektstruktur von `SEMusicStoreBase` ähnelt. Der einzige Unterschied besteht darin, dass der der Projektname 'SEMusicStoreBase' durch den Namen `SEMusicStoreAngular` ersetzt wurde. 
+Im nächsten Schritt öffnen Sie nun die Projektmappe `SEMusicStoreAngular` mit der IDE (Visual Studio, VSCode oder Rider). Nun haben Sie eine Projektstruktur die der Projektstruktur von `SEMusicStoreBase` ähnelt. Der einzige Unterschied besteht darin, dass der der Projektname 'SEMusicStoreBase' durch den Namen `SEMusicStoreAngular` ersetzt wurde.
 
-Die bereits definierten Entitäten `Genre`, `Artist`, `Album` und `Track` sind in der Projektmappe `SEMusicStoreAngular.Logic` enthalten. 
+Die bereits definierten Entitäten `Genre`, `Artist`, `Album` und `Track` sind in der Projektmappe `SEMusicStoreAngular.Logic` enthalten.
 
 ```bash
 -|- SEMusicStoreAngular
@@ -371,7 +371,7 @@ Choose [n|n,n|a...all|x|X]:
 
 Bevor Sie mit der `CodeGenerierung` beginnen, können einige Einstellungen vorgenommen werden. Sie finden die Beschreibung in der Dokumentation für [Menü: CodeGenerator](https://github.com/leoggehrer/SETemplate?tab=readme-ov-file#men%C3%BC-codegenerator).
 
-Nachdem die Einstellung vorgenommen wurde, wählen Sie die **Menü-option:** 9 - `Start` aus. Die `CodeGenerierung` startet und genriert die entsprechenden Code-Teile. Eine detailierte Übersicht erhalten Sie [hier](https://github.com/leoggehrer/SEMusicStoreBase/blob/master/README.md#schritt-12-starten-der-codegenerierung).
+Nachdem die Einstellung vorgenommen wurde, wählen Sie die **Menü-option:** 9 - `Start` aus. Die `CodeGenerierung` startet und generiert die entsprechenden Code-Teile. Eine detailierte Übersicht erhalten Sie [hier](https://github.com/leoggehrer/SEMusicStoreBase/blob/master/README.md#schritt-12-starten-der-codegenerierung).
 
 ### Schritt 9: Starten der Anwendung `SEMusicStoreAngular.ConApp`
 
